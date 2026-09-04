@@ -670,7 +670,7 @@ Este documento registra as condições da OS e não pretende afastar direitos as
 
   window.sendWhatsApp=function(telefone,nome,aparelho,status){
     let numero=String(telefone).replace(/\D/g,'');if(!numero.startsWith('55'))numero='55'+numero;
-    let mensagem=`Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\nAtualização sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
+    let mensagem=`Olá, *${nome}*! Tudo bem? Aqui é da Mackson Tech. 🛠️\n\nAtualização sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
     if(status==='Pronto')mensagem+='Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n';
     else if(status==='Aguardando Aprovação')mensagem+='O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n';
     else if(status==='Aguardando Peça')mensagem+='Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n';
