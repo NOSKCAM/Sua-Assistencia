@@ -5,201 +5,310 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestão — Ordem de Serviço</title>
   
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            brand: '#165EF0',
-            'brand-dark': '#1148BD',
-          }
+          colors: { brand: '#165EF0', 'brand-dark': '#1148BD' }
         }
       }
     }
   </script>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+<body class="bg-slate-50 text-slate-800 antialiased font-sans flex min-h-screen overflow-hidden">
 
-  <div class="flex min-h-screen">
+  <!-- BARRA LATERAL -->
+  <aside class="w-72 bg-white border-r border-slate-200 flex flex-col z-40">
+    <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
+      <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
+        OS
+      </div>
+      <div>
+        <span class="font-bold text-slate-900 text-lg leading-none block">TechFix OS</span>
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded mt-1 inline-block">Local</span>
+      </div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto p-4 space-y-6">
+      <div>
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Menu Principal</p>
+        <div class="space-y-1">
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm">
+            <div class="flex items-center gap-3">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+              <span>Ordens de Serviço</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden">
     
-    <!-- BARRA LATERAL (SIDEBAR) -->
-    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col fixed h-full z-40">
+    <!-- Header -->
+    <div class="p-8 pb-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900">Ordens de Serviço</h1>
+        <p class="text-sm text-slate-500">Gerencie os reparos e avise seus clientes pelo WhatsApp.</p>
+      </div>
       
-      <!-- Logo/Header -->
-      <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
-        <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
-          OS
-        </div>
-        <div>
-          <span class="font-bold text-slate-900 text-lg leading-none block">TechFix OS</span>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded mt-1 inline-block">Plano Pro</span>
+      <button onclick="openModal()" class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
+        <i data-lucide="plus" class="w-5 h-5"></i>
+        <span>Nova OS</span>
+      </button>
+    </div>
+
+    <!-- Tabela de OS -->
+    <div class="flex-1 p-8 pt-0 overflow-auto">
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
+              <th class="p-4">ID</th>
+              <th class="p-4">Cliente / Contato</th>
+              <th class="p-4">Aparelho / Defeito</th>
+              <th class="p-4">Status</th>
+              <th class="p-4 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="os-table-body" class="divide-y divide-slate-100 text-sm">
+            <!-- As linhas serão inseridas aqui pelo JavaScript -->
+          </tbody>
+        </table>
+        
+        <div id="empty-state" class="hidden flex-col items-center justify-center p-12 text-slate-400">
+          <i data-lucide="inbox" class="w-12 h-12 mb-3 text-slate-300"></i>
+          <p class="font-medium">Nenhuma Ordem de Serviço cadastrada.</p>
         </div>
       </div>
+    </div>
+  </main>
 
-      <!-- Navegação -->
-      <nav class="flex-1 overflow-y-auto p-4 space-y-6">
-        
-        <!-- Grupo 1 -->
-        <div>
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Gestão Operacional</p>
-          <div class="space-y-1">
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm">
-              <div class="flex items-center gap-3">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                <span>Dashboard</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </a>
-
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
-              <div class="flex items-center gap-3">
-                <i data-lucide="file-text" class="w-5 h-5"></i>
-                <span>Ordens de Serviço</span>
-              </div>
-              <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded border border-slate-200">12</span>
-            </a>
-
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
-              <div class="flex items-center gap-3">
-                <i data-lucide="smartphone" class="w-5 h-5"></i>
-                <span>Bancada / Fluxo</span>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <!-- Grupo 2 -->
-        <div>
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Clientes & Vendas</p>
-          <div class="space-y-1">
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
-              <div class="flex items-center gap-3">
-                <i data-lucide="users" class="w-5 h-5"></i>
-                <span>Clientes</span>
-              </div>
-            </a>
-
-            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
-              <div class="flex items-center gap-3">
-                <i data-lucide="package" class="w-5 h-5"></i>
-                <span>Estoque / Peças</span>
-              </div>
-            </a>
-          </div>
-        </div>
-
-      </nav>
-
-      <!-- Rodapé da Sidebar / Perfil -->
-      <div class="p-4 border-t border-slate-100 bg-slate-50/50">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-sm">
-            A
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-xs font-bold text-slate-800 truncate">Assistência Técnica</p>
-            <p class="text-[10px] text-slate-400 truncate">contato@empresa.com</p>
-          </div>
-          <button class="text-slate-400 hover:text-red-500 p-1">
-            <i data-lucide="log-out" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="flex-1 ml-72 p-8">
-      
-      <!-- Header / Título -->
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h1 class="text-2xl font-bold text-slate-900">Visão Geral</h1>
-          <p class="text-sm text-slate-500">Acompanhe o desempenho da sua assistência técnica em tempo real.</p>
-        </div>
-        
-        <button class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
-          <i data-lucide="plus" class="w-5 h-5"></i>
-          <span>Nova OS</span>
+  <!-- MODAL DE NOVA/EDITAR OS -->
+  <div id="os-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h2 class="font-bold text-lg text-slate-800" id="modal-title">Nova Ordem de Serviço</h2>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-
-      <!-- Banner de Alerta / Comunidade -->
-      <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-4 text-white flex items-center justify-between shadow-md mb-8">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
-            <i data-lucide="message-circle" class="w-6 h-6"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-sm">Grupo VIP de Suporte & Novidades</h3>
-            <p class="text-xs text-emerald-100">Receba dicas de gestão e atualizações diretas no WhatsApp.</p>
-          </div>
-        </div>
-        <button class="bg-white text-emerald-800 font-bold text-xs px-4 py-2 rounded-lg hover:bg-emerald-50 transition">
-          Entrar Agora
-        </button>
-      </div>
-
-      <!-- Grid de Métricas / Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      
+      <form id="os-form" onsubmit="saveOS(event)" class="p-5 space-y-4">
+        <input type="hidden" id="os-id">
         
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-semibold text-slate-400 uppercase">OS Abertas</span>
-            <div class="p-2 bg-blue-50 text-brand rounded-lg">
-              <i data-lucide="wrench" class="w-5 h-5"></i>
-            </div>
-          </div>
-          <p class="text-2xl font-bold text-slate-900">18</p>
-          <span class="text-xs text-emerald-600 font-medium">+3 hoje</span>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Nome do Cliente</label>
+          <input type="text" id="os-nome" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-semibold text-slate-400 uppercase">Aguardando Peça</span>
-            <div class="p-2 bg-amber-50 text-amber-600 rounded-lg">
-              <i data-lucide="clock" class="w-5 h-5"></i>
-            </div>
-          </div>
-          <p class="text-2xl font-bold text-slate-900">5</p>
-          <span class="text-xs text-slate-400">Pendente com fornecedor</span>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">WhatsApp (com DDD)</label>
+          <input type="text" id="os-telefone" placeholder="Ex: 11999999999" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-semibold text-slate-400 uppercase">Concluídas (Mês)</span>
-            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
-              <i data-lucide="check-circle" class="w-5 h-5"></i>
-            </div>
-          </div>
-          <p class="text-2xl font-bold text-slate-900">42</p>
-          <span class="text-xs text-emerald-600 font-medium">+12% em relação ao mês anterior</span>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Aparelho</label>
+          <input type="text" id="os-aparelho" placeholder="Ex: iPhone 11 / Samsung S20" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div class="flex justify-between items-start mb-2">
-            <span class="text-xs font-semibold text-slate-400 uppercase">Faturamento (Mês)</span>
-            <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-              <i data-lucide="dollar-sign" class="w-5 h-5"></i>
-            </div>
-          </div>
-          <p class="text-2xl font-bold text-slate-900">R$ 8.450,00</p>
-          <span class="text-xs text-slate-400">Meta: R$ 10.000,00</span>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Defeito / Relato</label>
+          <textarea id="os-defeito" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand h-20"></textarea>
         </div>
 
-      </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Status da OS</label>
+          <select id="os-status" class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+            <option value="Recebido">Recebido na Bancada</option>
+            <option value="Em Orçamento">Em Orçamento</option>
+            <option value="Aguardando Aprovação">Aguardando Aprovação do Cliente</option>
+            <option value="Aguardando Peça">Aguardando Peça</option>
+            <option value="Em Reparo">Em Reparo</option>
+            <option value="Pronto">Pronto para Retirada</option>
+            <option value="Entregue">Entregue (Finalizado)</option>
+          </select>
+        </div>
 
-    </main>
+        <div class="pt-2 flex justify-end gap-3">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-brand text-white font-medium hover:bg-brand-dark rounded-lg transition">Salvar OS</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
-    // Inicializar os ícones do Lucide
+    // Inicializar ícones na primeira carga
     lucide.createIcons();
+
+    // Banco de dados local (LocalStorage)
+    let ordens = JSON.parse(localStorage.getItem('techfix_os')) || [];
+
+    // Formatar cores de status
+    const statusColors = {
+      'Recebido': 'bg-slate-100 text-slate-600',
+      'Em Orçamento': 'bg-amber-100 text-amber-700',
+      'Aguardando Aprovação': 'bg-orange-100 text-orange-700',
+      'Aguardando Peça': 'bg-red-100 text-red-700',
+      'Em Reparo': 'bg-blue-100 text-blue-700',
+      'Pronto': 'bg-emerald-100 text-emerald-700',
+      'Entregue': 'bg-purple-100 text-purple-700',
+    };
+
+    function renderTable() {
+      const tbody = document.getElementById('os-table-body');
+      const emptyState = document.getElementById('empty-state');
+      
+      tbody.innerHTML = '';
+      
+      if (ordens.length === 0) {
+        emptyState.style.display = 'flex';
+      } else {
+        emptyState.style.display = 'none';
+        
+        ordens.forEach(os => {
+          const colorClass = statusColors[os.status] || 'bg-slate-100 text-slate-600';
+          
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 transition group';
+          tr.innerHTML = `
+            <td class="p-4 font-mono text-xs text-slate-400">#${os.id}</td>
+            <td class="p-4">
+              <p class="font-bold text-slate-900">${os.nome}</p>
+              <p class="text-xs text-slate-500">${os.telefone}</p>
+            </td>
+            <td class="p-4">
+              <p class="font-medium text-slate-800">${os.aparelho}</p>
+              <p class="text-xs text-slate-500 truncate max-w-[200px]">${os.defeito}</p>
+            </td>
+            <td class="p-4">
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${colorClass}">
+                ${os.status}
+              </span>
+            </td>
+            <td class="p-4 text-right space-x-2">
+              <button onclick="sendWhatsApp(${os.id})" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Enviar WhatsApp">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+              </button>
+              <button onclick="editOS(${os.id})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Editar">
+                <i data-lucide="edit" class="w-5 h-5"></i>
+              </button>
+              <button onclick="deleteOS(${os.id})" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Excluir">
+                <i data-lucide="trash-2" class="w-5 h-5"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      // Renderizar ícones nos novos botões criados
+      lucide.createIcons();
+    }
+
+    function openModal() {
+      document.getElementById('os-form').reset();
+      document.getElementById('os-id').value = '';
+      document.getElementById('modal-title').innerText = 'Nova Ordem de Serviço';
+      document.getElementById('os-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('os-modal').style.display = 'none';
+    }
+
+    function saveOS(event) {
+      event.preventDefault();
+      
+      const idInput = document.getElementById('os-id').value;
+      const osData = {
+        id: idInput ? parseInt(idInput) : Date.now(),
+        nome: document.getElementById('os-nome').value,
+        telefone: document.getElementById('os-telefone').value,
+        aparelho: document.getElementById('os-aparelho').value,
+        defeito: document.getElementById('os-defeito').value,
+        status: document.getElementById('os-status').value,
+      };
+
+      if (idInput) {
+        // Atualizar
+        const index = ordens.findIndex(o => o.id === osData.id);
+        ordens[index] = osData;
+      } else {
+        // Criar nova
+        ordens.unshift(osData);
+      }
+
+      localStorage.setItem('techfix_os', JSON.stringify(ordens));
+      closeModal();
+      renderTable();
+    }
+
+    function editOS(id) {
+      const os = ordens.find(o => o.id === id);
+      if (!os) return;
+
+      document.getElementById('os-id').value = os.id;
+      document.getElementById('os-nome').value = os.nome;
+      document.getElementById('os-telefone').value = os.telefone;
+      document.getElementById('os-aparelho').value = os.aparelho;
+      document.getElementById('os-defeito').value = os.defeito;
+      document.getElementById('os-status').value = os.status;
+      
+      document.getElementById('modal-title').innerText = 'Editar Ordem de Serviço';
+      document.getElementById('os-modal').style.display = 'flex';
+    }
+
+    function deleteOS(id) {
+      if(confirm('Tem certeza que deseja excluir esta Ordem de Serviço?')) {
+        ordens = ordens.filter(o => o.id !== id);
+        localStorage.setItem('techfix_os', JSON.stringify(ordens));
+        renderTable();
+      }
+    }
+
+    function sendWhatsApp(id) {
+      const os = ordens.find(o => o.id === id);
+      if (!os) return;
+
+      // Limpar o número de telefone (deixar apenas números)
+      let numero = os.telefone.replace(/\D/g, '');
+      
+      // Adicionar código do Brasil se o usuário não tiver colocado
+      if (!numero.startsWith('55')) {
+        numero = '55' + numero;
+      }
+
+      // Montar a mensagem padrão com quebras de linha e negrito do WhatsApp
+      let mensagem = `Olá, *${os.nome}*! Tudo bem?\nAqui é da assistência técnica. 🛠️\n\n`;
+      mensagem += `Gostaria de atualizar o status do seu aparelho (*${os.aparelho}*).\n`;
+      mensagem += `*Status Atual:* ${os.status}\n\n`;
+      
+      // Mensagens customizadas por status
+      if (os.status === 'Pronto') {
+        mensagem += `Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n`;
+      } else if (os.status === 'Aguardando Aprovação') {
+        mensagem += `O orçamento já está disponível. Aguardamos sua confirmação para iniciar o reparo.\n\n`;
+      } else if (os.status === 'Aguardando Peça') {
+        mensagem += `O reparo está pausado pois estamos aguardando a chegada de uma peça necessária com o fornecedor. Avisaremos assim que chegar!\n\n`;
+      }
+
+      mensagem += `Qualquer dúvida, estamos à disposição por aqui!`;
+
+      // Gerar o link do WhatsApp
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+      
+      // Abrir em uma nova aba
+      window.open(url, '_blank');
+    }
+
+    // Iniciar a tabela ao abrir o sistema
+    renderTable();
   </script>
 </body>
 </html>
