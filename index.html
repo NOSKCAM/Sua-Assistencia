@@ -4,32 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sua Assistência Pro</title>
+    <!-- Fonte Inter para visual moderno -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1e3a8a; --secondary: #0284c7; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
-        button:hover { background-color: var(--secondary); }
-        .canvas-container { border: 1px solid #ccc; border-radius: 6px; background: #fff; margin-top: 5px; }
-        canvas { width: 100%; height: 150px; touch-action: none; }
-        .os-card { border-left: 4px solid var(--secondary); background: #f1f5f9; padding: 15px; margin-bottom: 10px; border-radius: 4px; }
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #334155;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #475569;
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; }
+        
+        .header { background: var(--bg-card); padding: 20px; text-align: center; border-bottom: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+        .header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
+
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px 40px; }
+
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
+        .card h2 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+
+        .btn { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 8px; color: #fff; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+        .btn:hover { background: var(--primary-hover); }
+        .btn:active { transform: scale(0.98); }
+        .btn-secondary { background: #64748b; margin-top: 8px; }
+        .btn-success { background: var(--accent); }
+
+        .canvas-container { background: #ffffff; border-radius: 8px; overflow: hidden; margin-top: 6px; }
+        canvas { width: 100%; height: 140px; touch-action: none; display: block; }
+
+        .os-item { background: var(--bg-card); border: 1px solid var(--border); border-left: 5px solid var(--primary); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        .os-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .os-title { font-weight: 700; font-size: 1.1rem; }
+        .badge { background: rgba(59, 130, 246, 0.2); color: var(--primary); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+        .os-info { font-size: 0.9rem; color: var(--text-muted); margin: 4px 0; }
+        .os-info strong { color: var(--text-main); }
+
         @media print {
             body * { visibility: hidden; }
-            #printArea, #printArea * { visibility: visible; }
-            #printArea { position: absolute; left: 0; top: 0; width: 100%; }
+            #printArea, #printArea * { visibility: visible; color: #000; }
+            #printArea { position: absolute; left: 0; top: 0; width: 100%; background: #fff; padding: 20px; }
         }
     </style>
-    <!-- Firebase SDKs -->
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-        // Chaves de conexão recuperadas do seu projeto Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDOzWAT4oWzJuqSO0Qi_ToCUgbWxIpxLZ4",
             authDomain: "sua-assistencia.firebaseapp.com",
@@ -45,70 +79,68 @@
 
         window.db = db;
         window.storage = storage;
-        window.fbUtils = { collection, addDoc, getDocs, query, where, deleteDoc, doc, ref, uploadBytes, getDownloadURL };
+        window.fbUtils = { collection, addDoc, getDocs, ref, uploadBytes, getDownloadURL };
     </script>
 </head>
 <body>
 
+<div class="header">
+    <h1>SUA ASSISTÊNCIA PRO</h1>
+    <p>Gestão Inteligente de Ordens de Serviço</p>
+</div>
+
 <div class="container">
-    <h1>Sua Assistência Pro</h1>
-    
-    <!-- Formulário de Nova OS -->
-    <div id="osFormSection">
+    <div class="card">
         <h2>Nova Ordem de Serviço</h2>
         <form id="osForm">
             <div class="form-group">
-                <label>Nome do Cliente:</label>
-                <input type="text" id="cliente" required>
+                <label>NOME DO CLIENTE</label>
+                <input type="text" id="cliente" placeholder="Ex: João Silva" required>
             </div>
             <div class="form-group">
-                <label>Aparelho / Equipamento:</label>
-                <input type="text" id="equipamento" required>
+                <label>EQUIPAMENTO / MODELO</label>
+                <input type="text" id="equipamento" placeholder="Ex: iPhone 11 64GB" required>
             </div>
             <div class="form-group">
-                <label>Defeito / Relato:</label>
-                <textarea id="defeito" rows="3" required></textarea>
+                <label>DEFEITO RELATADO</label>
+                <textarea id="defeito" rows="3" placeholder="Ex: Tela quebrada e não carrega" required></textarea>
             </div>
             <div class="form-group">
-                <label>Valor Estimado (R$):</label>
-                <input type="number" id="valor" step="0.01">
+                <label>VALOR ORÇADO (R$)</label>
+                <input type="number" id="valor" step="0.01" placeholder="0.00">
             </div>
             <div class="form-group">
-                <label>Foto do Equipamento:</label>
+                <label>FOTO DO APARELHO</label>
                 <input type="file" id="fotoInput" accept="image/*">
             </div>
             <div class="form-group">
-                <label>Assinatura do Cliente:</label>
+                <label>ASSINATURA DIGITAL</label>
                 <div class="canvas-container">
                     <canvas id="signaturePad"></canvas>
                 </div>
-                <button type="button" onclick="limparAssinatura()" style="background:#64748b; margin-top:5px;">Limpar Assinatura</button>
+                <button type="button" class="btn btn-secondary" onclick="limparAssinatura()">Limpar Assinatura</button>
             </div>
-            <button type="submit" id="btnSalvar">Salvar Ordem de Serviço</button>
+            <button type="submit" id="btnSalvar" class="btn">Salvar e Registrar OS</button>
         </form>
     </div>
 
-    <hr style="margin: 30px 0;">
-
-    <!-- Listagem de OS -->
-    <div>
-        <h2>Ordens de Serviço Ativas</h2>
-        <button onclick="carregarOS()" style="background:#0284c7; margin-bottom:15px;">Atualizar Lista</button>
+    <div class="card">
+        <h2>Ordens de Serviço Recentes</h2>
+        <button class="btn btn-secondary" onclick="carregarOS()" style="margin-bottom: 15px;">Atualizar Lista</button>
         <div id="listaOS">Carregando ordens de serviço...</div>
     </div>
 </div>
 
-<div id="printArea" style="display:none; padding:20px;"></div>
+<div id="printArea" style="display:none;"></div>
 
 <script>
-    // Configuração do Canvas de Assinatura
     const canvas = document.getElementById('signaturePad');
     const ctx = canvas.getContext('2d');
     let desenhando = false;
 
     function resizeCanvas() {
         canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = 150;
+        canvas.height = 140;
     }
     window.addEventListener('resize', resizeCanvas);
     setTimeout(resizeCanvas, 500);
@@ -124,7 +156,7 @@
         const rect = canvas.getBoundingClientRect();
         const touch = e.touches[0];
         ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
         ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
         ctx.stroke();
         ctx.beginPath();
@@ -136,7 +168,7 @@
         if(!desenhando) return;
         const rect = canvas.getBoundingClientRect();
         ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
         ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
         ctx.stroke();
         ctx.beginPath();
@@ -147,12 +179,11 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Lógica para Salvar no Firebase
     document.getElementById('osForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnSalvar');
         btn.disabled = true;
-        btn.innerText = "Salvando na Nuvem...";
+        btn.innerText = "Processando...";
 
         try {
             let fotoUrl = "";
@@ -163,75 +194,67 @@
                 fotoUrl = await window.fbUtils.getDownloadURL(storageRef);
             }
 
-            // Assinatura em Base64
-            const assinaturaData = canvas.toDataURL();
-
             const novaOS = {
                 cliente: document.getElementById('cliente').value,
                 equipamento: document.getElementById('equipamento').value,
                 defeito: document.getElementById('defeito').value,
                 valor: document.getElementById('valor').value,
                 fotoUrl: fotoUrl,
-                assinatura: assinaturaData,
+                assinatura: canvas.toDataURL(),
                 status: 'Ativo',
                 dataCriacao: new Date().toISOString()
             };
 
             await window.fbUtils.addDoc(window.fbUtils.collection(window.db, "ordens_servico"), novaOS);
-            alert("Ordem de Serviço criada com sucesso!");
+            alert("OS registrada com sucesso!");
             document.getElementById('osForm').reset();
             limparAssinatura();
             carregarOS();
         } catch (error) {
-            console.error("Erro ao salvar: ", error);
-            alert("Erro ao salvar OS. Verifique se ativou o modo de teste no Firestore/Storage.");
+            console.error(error);
+            alert("Erro ao salvar a OS.");
         } finally {
             btn.disabled = false;
-            btn.innerText = "Salvar Ordem de Serviço";
+            btn.innerText = "Salvar e Registrar OS";
         }
     });
 
-    // Lógica para Carregar e Aplicar Filtro da Lixeira (30 Dias)
     async function carregarOS() {
         const container = document.getElementById('listaOS');
-        container.innerHTML = "Buscando dados...";
+        container.innerHTML = "Buscando registros...";
 
         try {
             const querySnapshot = await window.fbUtils.getDocs(window.fbUtils.collection(window.db, "ordens_servico"));
             container.innerHTML = "";
-
             const agora = new Date();
 
             querySnapshot.forEach((docSnap) => {
                 const data = docSnap.data();
                 const dataCriacao = new Date(data.dataCriacao);
-                const diasDiferenca = (agora - dataCriacao) / (1000 * 60 * 60 * 24);
+                const dias = (agora - dataCriacao) / (1000 * 60 * 60 * 24);
 
-                // Regra dos 30 dias: Se tiver mais de 30 dias e estiver concluído, oculta/remove
-                if(data.status === 'Concluido' && diasDiferenca > 30) {
-                    return; // Pula a exibição
-                }
+                if(data.status === 'Concluido' && dias > 30) return;
 
-                const card = document.createElement('div');
-                card.className = 'os-card';
-                card.innerHTML = `
-                    <h3>OS #${docSnap.id.substring(0,6)} - ${data.cliente}</h3>
-                    <p><strong>Equipamento:</strong> ${data.equipamento}</p>
-                    <p><strong>Defeito:</strong> ${data.defeito}</p>
-                    <p><strong>Valor:</strong> R$ ${data.valor || '0.00'}</p>
-                    <p><strong>Data:</strong> ${dataCriacao.toLocaleDateString('pt-BR')}</p>
-                    ${data.fotoUrl ? `<p><a href="${data.fotoUrl}" target="_blank">Ver Foto Anexada</a></p>` : ''}
-                    <button onclick="imprimirOS('${data.cliente}', '${data.equipamento}', '${data.defeito}', '${data.valor}', '${data.assinatura}')" style="background:#16a34a;">Imprimir / Gerar PDF</button>
+                const item = document.createElement('div');
+                item.className = 'os-item';
+                item.innerHTML = `
+                    <div class="os-header">
+                        <span class="os-title">${data.cliente}</span>
+                        <span class="badge">OS #${docSnap.id.substring(0,5).toUpperCase()}</span>
+                    </div>
+                    <div class="os-info"><strong>Aparelho:</strong> ${data.equipamento}</div>
+                    <div class="os-info"><strong>Defeito:</strong> ${data.defeito}</div>
+                    <div class="os-info"><strong>Valor:</strong> R$ ${data.valor || '0,00'}</div>
+                    <div class="os-info"><strong>Data:</strong> ${dataCriacao.toLocaleDateString('pt-BR')}</div>
+                    ${data.fotoUrl ? `<div class="os-info"><a href="${data.fotoUrl}" target="_blank" style="color:var(--primary)">Ver Foto Anexada</a></div>` : ''}
+                    <button class="btn btn-success" style="margin-top:10px;" onclick="imprimirOS('${data.cliente}', '${data.equipamento}', '${data.defeito}', '${data.valor}', '${data.assinatura}')">Imprimir Comprovante</button>
                 `;
-                container.appendChild(card);
+                container.appendChild(item);
             });
 
-            if(container.innerHTML === "") {
-                container.innerHTML = "Nenhuma Ordem de Serviço ativa encontrada.";
-            }
+            if(container.innerHTML === "") container.innerHTML = "Nenhuma OS cadastrada.";
         } catch (error) {
-            console.error("Erro ao carregar: ", error);
-            container.innerHTML = "Erro ao carregar lista de OS.";
+            container.innerHTML = "Erro ao carregar lista.";
         }
     }
 
@@ -243,15 +266,15 @@
             <p><strong>Cliente:</strong> ${cliente}</p>
             <p><strong>Equipamento:</strong> ${eq}</p>
             <p><strong>Defeito Relatado:</strong> ${def}</p>
-            <p><strong>Valor Orcado:</strong> R$ ${val}</p>
+            <p><strong>Valor:</strong> R$ ${val}</p>
             <br>
             <p><strong>Assinatura do Cliente:</strong></p>
-            <img src="${ass}" style="border-bottom:1px solid #000; max-width:300px;">
+            <img src="${ass}" style="border-bottom:1px solid #000; max-width:250px;">
         `;
         window.print();
     }
 
-    window.onload = () => setTimeout(carregarOS, 1500);
+    window.onload = () => setTimeout(carregarOS, 1000);
 </script>
 </body>
 </html>
