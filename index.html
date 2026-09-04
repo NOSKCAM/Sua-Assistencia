@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Gestão — Ordem de Serviço</title>
+  <title>Sua Asistência OS - MACKSON TEHCNOLOGY </title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,8 +27,8 @@
         OS
       </div>
       <div>
-        <span class="font-bold text-slate-900 text-lg leading-none block">Sua Assistencia OS</span>
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded mt-1 inline-block">Local</span>
+        <span class="font-bold text-slate-900 text-lg leading-none block"> Mackson Tech OS - Sua Assitência </span>
+        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Firebase Nuvem</span>
       </div>
     </div>
 
@@ -54,7 +54,7 @@
     <div class="p-8 pb-4 flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold text-slate-900">Ordens de Serviço</h1>
-        <p class="text-sm text-slate-500">Gerencie os reparos e avise seus clientes pelo WhatsApp.</p>
+        <p class="text-sm text-slate-500">Dados salvos na nuvem e envio direto para o WhatsApp do cliente.</p>
       </div>
       
       <button onclick="openModal()" class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
@@ -69,7 +69,7 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
-              <th class="p-4">ID</th>
+              <th class="p-4">Foto</th>
               <th class="p-4">Cliente / Contato</th>
               <th class="p-4">Aparelho / Defeito</th>
               <th class="p-4">Status</th>
@@ -77,10 +77,15 @@
             </tr>
           </thead>
           <tbody id="os-table-body" class="divide-y divide-slate-100 text-sm">
-            <!-- As linhas serão inseridas aqui pelo JavaScript -->
+            <!-- Inserido via JS -->
           </tbody>
         </table>
         
+        <div id="loading-state" class="flex flex-col items-center justify-center p-12 text-slate-400">
+          <i data-lucide="loader-2" class="w-8 h-8 mb-3 animate-spin text-brand"></i>
+          <p class="font-medium text-sm">Carregando ordens de serviço do Firebase...</p>
+        </div>
+
         <div id="empty-state" class="hidden flex-col items-center justify-center p-12 text-slate-400">
           <i data-lucide="inbox" class="w-12 h-12 mb-3 text-slate-300"></i>
           <p class="font-medium">Nenhuma Ordem de Serviço cadastrada.</p>
@@ -91,7 +96,7 @@
 
   <!-- MODAL DE NOVA/EDITAR OS -->
   <div id="os-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] flex flex-col">
       <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
         <h2 class="font-bold text-lg text-slate-800" id="modal-title">Nova Ordem de Serviço</h2>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700">
@@ -99,32 +104,32 @@
         </button>
       </div>
       
-      <form id="os-form" onsubmit="saveOS(event)" class="p-5 space-y-4">
+      <form id="os-form" onsubmit="saveOS(event)" class="p-5 space-y-4 overflow-y-auto flex-1">
         <input type="hidden" id="os-id">
         
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">Nome do Cliente</label>
-          <input type="text" id="os-nome" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+          <input type="text" id="os-nome" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">WhatsApp (com DDD)</label>
-          <input type="text" id="os-telefone" placeholder="Ex: 11999999999" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+          <input type="text" id="os-telefone" placeholder="Ex: 11999999999" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">Aparelho</label>
-          <input type="text" id="os-aparelho" placeholder="Ex: iPhone 11 / Samsung S20" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+          <input type="text" id="os-aparelho" placeholder="Ex: iPhone 11 / Samsung S20" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">Defeito / Relato</label>
-          <textarea id="os-defeito" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand h-20"></textarea>
+          <textarea id="os-defeito" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20"></textarea>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">Status da OS</label>
-          <select id="os-status" class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+          <select id="os-status" class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
             <option value="Recebido">Recebido na Bancada</option>
             <option value="Em Orçamento">Em Orçamento</option>
             <option value="Aguardando Aprovação">Aguardando Aprovação do Cliente</option>
@@ -135,22 +140,40 @@
           </select>
         </div>
 
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Foto do Aparelho (Opcional)</label>
+          <input type="file" id="os-foto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-brand hover:file:bg-blue-100">
+        </div>
+
         <div class="pt-2 flex justify-end gap-3">
           <button type="button" onclick="closeModal()" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition">Cancelar</button>
-          <button type="submit" class="px-4 py-2 bg-brand text-white font-medium hover:bg-brand-dark rounded-lg transition">Salvar OS</button>
+          <button type="submit" id="btn-salvar" class="px-4 py-2 bg-brand text-white font-medium hover:bg-brand-dark rounded-lg transition">Salvar OS</button>
         </div>
       </form>
     </div>
   </div>
 
-  <script>
-    // Inicializar ícones na primeira carga
-    lucide.createIcons();
+  <!-- FIREBASE SDKs (Modular CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-    // Banco de dados local (LocalStorage)
-    let ordens = JSON.parse(localStorage.getItem('techfix_os')) || [];
+    // Configuração do Firebase fornecida
+    const firebaseConfig = {
+      apiKey: "AIzaSyDOzwAT4oWzJuq5O0Qj_TpCUgbWwIxpLZ4",
+      authDomain: "sua-assistencia.firebaseapp.com",
+      projectId: "sua-assistencia",
+      storageBucket: "sua-assistencia.firebasestorage.app",
+      messagingSenderId: "700070354483",
+      appId: "1:700070354483:web:b761d6faef14120bed0d46"
+    };
 
-    // Formatar cores de status
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
     const statusColors = {
       'Recebido': 'bg-slate-100 text-slate-600',
       'Em Orçamento': 'bg-amber-100 text-amber-700',
@@ -161,154 +184,186 @@
       'Entregue': 'bg-purple-100 text-purple-700',
     };
 
-    function renderTable() {
+    let ordensCache = [];
+
+    window.carregarOS = async function() {
       const tbody = document.getElementById('os-table-body');
       const emptyState = document.getElementById('empty-state');
+      const loadingState = document.getElementById('loading-state');
       
+      loadingState.style.display = 'flex';
       tbody.innerHTML = '';
-      
-      if (ordens.length === 0) {
-        emptyState.style.display = 'flex';
-      } else {
-        emptyState.style.display = 'none';
-        
-        ordens.forEach(os => {
-          const colorClass = statusColors[os.status] || 'bg-slate-100 text-slate-600';
-          
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-50 transition group';
-          tr.innerHTML = `
-            <td class="p-4 font-mono text-xs text-slate-400">#${os.id}</td>
-            <td class="p-4">
-              <p class="font-bold text-slate-900">${os.nome}</p>
-              <p class="text-xs text-slate-500">${os.telefone}</p>
-            </td>
-            <td class="p-4">
-              <p class="font-medium text-slate-800">${os.aparelho}</p>
-              <p class="text-xs text-slate-500 truncate max-w-[200px]">${os.defeito}</p>
-            </td>
-            <td class="p-4">
-              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${colorClass}">
-                ${os.status}
-              </span>
-            </td>
-            <td class="p-4 text-right space-x-2">
-              <button onclick="sendWhatsApp(${os.id})" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Enviar WhatsApp">
-                <i data-lucide="message-circle" class="w-5 h-5"></i>
-              </button>
-              <button onclick="editOS(${os.id})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Editar">
-                <i data-lucide="edit" class="w-5 h-5"></i>
-              </button>
-              <button onclick="deleteOS(${os.id})" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Excluir">
-                <i data-lucide="trash-2" class="w-5 h-5"></i>
-              </button>
-            </td>
-          `;
-          tbody.appendChild(tr);
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "ordens"));
+        ordensCache = [];
+        querySnapshot.forEach((docSnap) => {
+          ordensCache.push({ idDoc: docSnap.id, ...docSnap.data() });
         });
+
+        loadingState.style.display = 'none';
+
+        if (ordensCache.length === 0) {
+          emptyState.style.display = 'flex';
+        } else {
+          emptyState.style.display = 'none';
+          ordensCache.forEach(os => {
+            const colorClass = statusColors[os.status] || 'bg-slate-100 text-slate-600';
+            const fotoHtml = os.fotoUrl 
+              ? `<img src="${os.fotoUrl}" class="w-10 h-10 object-cover rounded-lg border border-slate-200 cursor-pointer" onclick="window.open('${os.fotoUrl}', '_blank')">`
+              : `<div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-xs"><i data-lucide="image-off" class="w-4 h-4"></i></div>`;
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50 transition';
+            tr.innerHTML = `
+              <td class="p-4">${fotoHtml}</td>
+              <td class="p-4">
+                <p class="font-bold text-slate-900">${os.nome}</p>
+                <p class="text-xs text-slate-500">${os.telefone}</p>
+              </td>
+              <td class="p-4">
+                <p class="font-medium text-slate-800">${os.aparelho}</p>
+                <p class="text-xs text-slate-500 truncate max-w-[200px]">${os.defeito}</p>
+              </td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${colorClass}">
+                  ${os.status}
+                </span>
+              </td>
+              <td class="p-4 text-right space-x-1">
+                <button onclick="sendWhatsApp('${os.telefone}', '${os.nome}', '${os.aparelho}', '${os.status}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Enviar WhatsApp">
+                  <i data-lucide="message-circle" class="w-5 h-5"></i>
+                </button>
+                <button onclick="prepararEdicao('${os.idDoc}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Editar">
+                  <i data-lucide="edit" class="w-5 h-5"></i>
+                </button>
+                <button onclick="excluirOS('${os.idDoc}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Excluir">
+                  <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+        lucide.createIcons();
+      } catch (error) {
+        console.error("Erro ao carregar do Firebase:", error);
+        loadingState.innerHTML = `<p class="text-red-500 text-xs">Erro ao carregar dados. Verifique sua conexão ou regras do Firestore.</p>`;
       }
-      // Renderizar ícones nos novos botões criados
-      lucide.createIcons();
     }
 
-    function openModal() {
+    window.saveOS = async function(event) {
+      event.preventDefault();
+      const btnSalvar = document.getElementById('btn-salvar');
+      btnSalvar.innerText = "Salvando na nuvem...";
+      btnSalvar.disabled = true;
+
+      const idDoc = document.getElementById('os-id').value;
+      const fileInput = document.getElementById('os-foto');
+      
+      let fotoUrl = "";
+      if (idDoc) {
+        const osAntiga = ordensCache.find(o => o.idDoc === idDoc);
+        if (osAntiga) fotoUrl = osAntiga.fotoUrl || "";
+      }
+
+      // Se enviou foto nova, faz upload pro Firebase Storage
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const storageRef = ref(storage, `os_fotos/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        fotoUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      const osData = {
+        nome: document.getElementById('os-nome').value,
+        telefone: document.getElementById('os-telefone').value,
+        aparelho: document.getElementById('os-aparelho').value,
+        defeito: document.getElementById('os-defeito').value,
+        status: document.getElementById('os-status').value,
+        fotoUrl: fotoUrl,
+        atualizadoEm: new Date().toISOString()
+      };
+
+      try {
+        if (idDoc) {
+          await updateDoc(doc(db, "ordens", idDoc), osData);
+        } else {
+          await addDoc(collection(db, "ordens"), osData);
+        }
+        closeModal();
+        carregarOS();
+      } catch (error) {
+        console.error("Erro ao salvar:", error);
+        alert("Erro ao salvar no Firebase. Veja o console.");
+      } finally {
+        btnSalvar.innerText = "Salvar OS";
+        btnSalvar.disabled = false;
+      }
+    }
+
+    window.excluirOS = async function(idDoc) {
+      if (confirm('Deseja realmente excluir esta OS da nuvem?')) {
+        try {
+          await deleteDoc(doc(db, "ordens", idDoc));
+          carregarOS();
+        } catch (error) {
+          console.error("Erro ao excluir:", error);
+        }
+      }
+    }
+
+    window.prepararEdicao = function(idDoc) {
+      const os = ordensCache.find(o => o.idDoc === idDoc);
+      if (!os) return;
+
+      document.getElementById('os-id').value = os.idDoc;
+      document.getElementById('os-nome').value = os.nome;
+      document.getElementById('os-telefone').value = os.telefone;
+      document.getElementById('os-aparelho').value = os.aparelho;
+      document.getElementById('os-defeito').value = os.defeito;
+      document.getElementById('os-status').value = os.status;
+      document.getElementById('os-foto').value = '';
+
+      document.getElementById('modal-title').innerText = 'Editar Ordem de Serviço';
+      document.getElementById('os-modal').style.display = 'flex';
+    }
+
+    window.sendWhatsApp = function(telefone, nome, aparelho, status) {
+      let numero = telefone.replace(/\D/g, '');
+      if (!numero.startsWith('55')) numero = '55' + numero;
+
+      let mensagem = `Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\n`;
+      mensagem += `Atualização sobre o seu aparelho (*${aparelho}*).\n`;
+      mensagem += `*Status Atual:* ${status}\n\n`;
+
+      if (status === 'Pronto') {
+        mensagem += `Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n`;
+      } else if (status === 'Aguardando Aprovação') {
+        mensagem += `O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n`;
+      } else if (status === 'Aguardando Peça') {
+        mensagem += `Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n`;
+      }
+
+      mensagem += `Qualquer dúvida, estamos à disposição!`;
+
+      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
+    }
+
+    window.openModal = function() {
       document.getElementById('os-form').reset();
       document.getElementById('os-id').value = '';
       document.getElementById('modal-title').innerText = 'Nova Ordem de Serviço';
       document.getElementById('os-modal').style.display = 'flex';
     }
 
-    function closeModal() {
+    window.closeModal = function() {
       document.getElementById('os-modal').style.display = 'none';
     }
 
-    function saveOS(event) {
-      event.preventDefault();
-      
-      const idInput = document.getElementById('os-id').value;
-      const osData = {
-        id: idInput ? parseInt(idInput) : Date.now(),
-        nome: document.getElementById('os-nome').value,
-        telefone: document.getElementById('os-telefone').value,
-        aparelho: document.getElementById('os-aparelho').value,
-        defeito: document.getElementById('os-defeito').value,
-        status: document.getElementById('os-status').value,
-      };
-
-      if (idInput) {
-        // Atualizar
-        const index = ordens.findIndex(o => o.id === osData.id);
-        ordens[index] = osData;
-      } else {
-        // Criar nova
-        ordens.unshift(osData);
-      }
-
-      localStorage.setItem('techfix_os', JSON.stringify(ordens));
-      closeModal();
-      renderTable();
-    }
-
-    function editOS(id) {
-      const os = ordens.find(o => o.id === id);
-      if (!os) return;
-
-      document.getElementById('os-id').value = os.id;
-      document.getElementById('os-nome').value = os.nome;
-      document.getElementById('os-telefone').value = os.telefone;
-      document.getElementById('os-aparelho').value = os.aparelho;
-      document.getElementById('os-defeito').value = os.defeito;
-      document.getElementById('os-status').value = os.status;
-      
-      document.getElementById('modal-title').innerText = 'Editar Ordem de Serviço';
-      document.getElementById('os-modal').style.display = 'flex';
-    }
-
-    function deleteOS(id) {
-      if(confirm('Tem certeza que deseja excluir esta Ordem de Serviço?')) {
-        ordens = ordens.filter(o => o.id !== id);
-        localStorage.setItem('techfix_os', JSON.stringify(ordens));
-        renderTable();
-      }
-    }
-
-    function sendWhatsApp(id) {
-      const os = ordens.find(o => o.id === id);
-      if (!os) return;
-
-      // Limpar o número de telefone (deixar apenas números)
-      let numero = os.telefone.replace(/\D/g, '');
-      
-      // Adicionar código do Brasil se o usuário não tiver colocado
-      if (!numero.startsWith('55')) {
-        numero = '55' + numero;
-      }
-
-      // Montar a mensagem padrão com quebras de linha e negrito do WhatsApp
-      let mensagem = `Olá, *${os.nome}*! Tudo bem?\nAqui é da Mackson Tech. 🛠️\n\n`;
-      mensagem += `Gostaria de atualizar o status do seu aparelho (*${os.aparelho}*).\n`;
-      mensagem += `*Status Atual:* ${os.status}\n\n`;
-      
-      // Mensagens customizadas por status
-      if (os.status === 'Pronto') {
-        mensagem += `Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n`;
-      } else if (os.status === 'Aguardando Aprovação') {
-        mensagem += `O orçamento já está disponível. Aguardamos sua confirmação para iniciar o reparo.\n\n`;
-      } else if (os.status === 'Aguardando Peça') {
-        mensagem += `O reparo está pausado pois estamos aguardando a chegada de uma peça necessária com o fornecedor. Avisaremos assim que chegar!\n\n`;
-      }
-
-      mensagem += `Qualquer dúvida, estamos à disposição por aqui!`;
-
-      // Gerar o link do WhatsApp
-      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-      
-      // Abrir em uma nova aba
-      window.open(url, '_blank');
-    }
-
-    // Iniciar a tabela ao abrir o sistema
-    renderTable();
+    // Carregar na inicialização
+    carregarOS();
+    lucide.createIcons();
   </script>
 </body>
 </html>
