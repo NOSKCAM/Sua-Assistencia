@@ -18,7 +18,7 @@
   </script>
   <style>
     .modal-scroll { scrollbar-width: thin; }
-    canvas.signature-pad { touch-action: none; }
+    canvas.signature-pad { touch-action: none; cursor: crosshair; }
     @media print {
       body > *:not(#print-document) { display: none !important; }
       #print-document { display: block !important; }
@@ -267,17 +267,27 @@
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="border border-slate-200 rounded-xl p-3">
-              <div class="flex justify-between items-center mb-2"><span class="text-sm font-semibold">Assinatura do cliente</span><button type="button" onclick="clearSignature('cliente')" class="text-xs text-red-500">Limpar</button></div>
-              <canvas id="signature-cliente" class="signature-pad w-full h-36 border border-dashed border-slate-300 rounded-lg bg-white"></canvas>
-              <button type="button" onclick="salvarAssinatura('cliente')" class="mt-2 w-full py-2 bg-blue-50 text-brand rounded-lg text-sm font-semibold">Salvar assinatura do cliente</button>
-              <div id="cliente-sign-status" class="text-xs text-slate-500 mt-2"></div>
+            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-800">Assinatura do cliente</span>
+                <button type="button" onclick="clearSignature('cliente')" class="text-xs text-red-600 hover:underline font-medium">Limpar</button>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg overflow-hidden relative shadow-inner">
+                <canvas id="signature-cliente" class="signature-pad w-full h-40 block"></canvas>
+              </div>
+              <button type="button" onclick="salvarAssinatura('cliente')" class="mt-2.5 w-full py-2 bg-brand text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-brand-dark transition">Salvar assinatura do cliente</button>
+              <div id="cliente-sign-status" class="text-xs text-slate-500 mt-2 text-center"></div>
             </div>
-            <div class="border border-slate-200 rounded-xl p-3">
-              <div class="flex justify-between items-center mb-2"><span class="text-sm font-semibold">Assinatura da assistência</span><button type="button" onclick="clearSignature('assistencia')" class="text-xs text-red-500">Limpar</button></div>
-              <canvas id="signature-assistencia" class="signature-pad w-full h-36 border border-dashed border-slate-300 rounded-lg bg-white"></canvas>
-              <button type="button" onclick="salvarAssinatura('assistencia')" class="mt-2 w-full py-2 bg-blue-50 text-brand rounded-lg text-sm font-semibold">Salvar assinatura da assistência</button>
-              <div id="assistencia-sign-status" class="text-xs text-slate-500 mt-2"></div>
+            <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-slate-800">Assinatura da assistência</span>
+                <button type="button" onclick="clearSignature('assistencia')" class="text-xs text-red-600 hover:underline font-medium">Limpar</button>
+              </div>
+              <div class="bg-white border border-slate-300 rounded-lg overflow-hidden relative shadow-inner">
+                <canvas id="signature-assistencia" class="signature-pad w-full h-40 block"></canvas>
+              </div>
+              <button type="button" onclick="salvarAssinatura('assistencia')" class="mt-2.5 w-full py-2 bg-brand text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-brand-dark transition">Salvar assinatura da assistência</button>
+              <div id="assistencia-sign-status" class="text-xs text-slate-500 mt-2 text-center"></div>
             </div>
           </div>
         </div>
@@ -316,7 +326,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import {
     getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc,
-    getDoc, setDoc, query, where, orderBy
+    getDoc, setDoc, query, orderBy
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
   import {
@@ -533,7 +543,7 @@ Este documento registra as condições da OS e não pretende afastar direitos as
             <button onclick="prepararEdicao('${os.idDoc}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Editar"><i data-lucide="edit" class="w-5 h-5"></i></button>
             <button onclick="abrirDocumentoPorId('${os.idDoc}')" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg" title="Documento"><i data-lucide="file-signature" class="w-5 h-5"></i></button>
             <button onclick="excluirOS('${os.idDoc}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg" title="Excluir"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-          </td>`;
+          `;
         tbody.appendChild(tr);
       });
       icons();
@@ -629,100 +639,197 @@ Este documento registra as condições da OS e não pretende afastar direitos as
     document.getElementById('modal-title').textContent='Editar Ordem de Serviço'; document.getElementById('modal-os-id').textContent='ID: '+id;
     document.getElementById('document-section').classList.remove('hidden'); document.getElementById('btn-doc-nova').classList.add('hidden');
     currentOS={...os}; resetPhotoState(os); calcFinance();
-    await carregarAssinaturasNaOS(os);
-    document.getElementById('os-modal').style.display='flex'; icons();
+    
+    document.getElementById('os-modal').style.display='flex';
+    icons();
+
+    // Aguarda o modal se tornar visível para calcular corretamente as dimensões do Canvas de assinatura
+    setTimeout(()=>{
+      carregarAssinaturasNaOS(os);
+    }, 100);
   };
 
-  async function carregarAssinaturasNaOS(os){
-    signatures.cliente=os.assinaturas?.cliente||''; signatures.assistencia=os.assinaturas?.assistencia||'';
-    signatureDirty.cliente=false; signatureDirty.assistencia=false;
-    initSignatureCanvas('cliente'); initSignatureCanvas('assistencia');
-    setTimeout(()=>{
-      if(signatures.cliente) drawImageToCanvas('cliente',signatures.cliente);
-      if(signatures.assistencia) drawImageToCanvas('assistencia',signatures.assistencia);
-      document.getElementById('cliente-sign-status').textContent=signatures.cliente?'Assinatura salva na OS.':'Ainda não assinada.';
-      document.getElementById('assistencia-sign-status').textContent=signatures.assistencia?'Assinatura salva na OS.':'Ainda não assinada.';
-    },50);
+  function carregarAssinaturasNaOS(os){
+    signatures.cliente = os.assinaturas?.cliente || '';
+    signatures.assistencia = os.assinaturas?.assistencia || '';
+    signatureDirty.cliente = false;
+    signatureDirty.assistencia = false;
+
+    initSignatureCanvas('cliente');
+    initSignatureCanvas('assistencia');
+
+    if(signatures.cliente) drawImageToCanvas('cliente', signatures.cliente);
+    if(signatures.assistencia) drawImageToCanvas('assistencia', signatures.assistencia);
+
+    document.getElementById('cliente-sign-status').textContent = signatures.cliente ? 'Assinatura salva na OS.' : 'Nenhuma assinatura registrada.';
+    document.getElementById('assistencia-sign-status').textContent = signatures.assistencia ? 'Assinatura salva na OS.' : 'Nenhuma assinatura registrada.';
   }
 
   function initSignatureCanvas(type){
-    const c=document.getElementById('signature-'+type); if(!c)return;
-    const rect=c.getBoundingClientRect(), ratio=window.devicePixelRatio||1;
-    c.width=rect.width*ratio; c.height=rect.height*ratio;
-    const ctx=c.getContext('2d'); ctx.scale(ratio,ratio); ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#111827';
-    let drawing=false;
-    const pos=e=>{const r=c.getBoundingClientRect(); const p=e.touches?.[0]||e; return {x:p.clientX-r.left,y:p.clientY-r.top};};
-    const start=e=>{e.preventDefault(); drawing=true; const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);signatureDirty[type]=true;};
-    const move=e=>{if(!drawing)return;e.preventDefault();const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();};
-    const end=()=>{drawing=false;};
-    c.onpointerdown=start;c.onpointermove=move;c.onpointerup=end;c.onpointerleave=end;
+    const c = document.getElementById('signature-' + type);
+    if(!c) return;
+
+    // Define o tamanho real do elemento HTML de acordo com o container CSS
+    const rect = c.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    
+    if (rect.width > 0) {
+      c.width = rect.width * ratio;
+      c.height = rect.height * ratio;
+    }
+
+    const ctx = c.getContext('2d');
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(ratio, ratio);
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#0f172a';
+
+    let drawing = false;
+
+    const getPos = (e) => {
+      const r = c.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - r.left,
+        y: clientY - r.top
+      };
+    };
+
+    const start = (e) => {
+      e.preventDefault();
+      drawing = true;
+      const p = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      signatureDirty[type] = true;
+    };
+
+    const move = (e) => {
+      if(!drawing) return;
+      e.preventDefault();
+      const p = getPos(e);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    };
+
+    const end = (e) => {
+      if(!drawing) return;
+      e.preventDefault();
+      drawing = false;
+    };
+
+    // Remove eventos antigos clonando ou limpando handlers para evitar duplicações
+    c.onpointerdown = null;
+    c.onpointermove = null;
+    c.onpointerup = null;
+    c.onpointerleave = null;
+
+    c.addEventListener('pointerdown', start);
+    c.addEventListener('pointermove', move);
+    c.addEventListener('pointerup', end);
+    c.addEventListener('pointerleave', end);
   }
 
-  function drawImageToCanvas(type,data){
-    const c=document.getElementById('signature-'+type),ctx=c.getContext('2d'),img=new Image();
-    img.onload=()=>{const r=Math.min(c.width/img.width,c.height/img.height);ctx.drawImage(img,(c.width-img.width*r)/2,(c.height-img.height*r)/2,img.width*r,img.height*r);};
-    img.src=data;
+  function drawImageToCanvas(type, data){
+    const c = document.getElementById('signature-' + type);
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      ctx.clearRect(0, 0, c.width, c.height);
+      const ratio = window.devicePixelRatio || 1;
+      const displayWidth = c.width / ratio;
+      const displayHeight = c.height / ratio;
+      ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
+    };
+    img.src = data;
   }
 
-  window.clearSignature=function(type){
-    const c=document.getElementById('signature-'+type),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
-    signatures[type]='';signatureDirty[type]=true;document.getElementById(type+'-sign-status').textContent='Assinatura removida (salve a OS).';
+  window.clearSignature = function(type){
+    const c = document.getElementById('signature-' + type);
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+    ctx.clearRect(0, 0, c.width * ratio, c.height * ratio);
+    signatures[type] = '';
+    signatureDirty[type] = true;
+    document.getElementById(type + '-sign-status').textContent = 'Assinatura limpa. Clique em salvar.';
   };
 
-  window.salvarAssinatura=async function(type){
-    const id=document.getElementById('os-id').value;
+  window.salvarAssinatura = async function(type){
+    const id = document.getElementById('os-id').value;
     if(!id){ alert('Salve a OS primeiro para vincular a assinatura.'); return; }
-    const c=document.getElementById('signature-'+type);
-    const data=c.toDataURL('image/png');
-    if(!signatureDirty[type] && signatures[type]) return alert('Esta assinatura já está salva.');
-    signatures[type]=data;
-    const os=ordensCache.find(o=>o.idDoc===id)||currentOS||{};
-    const assinaturas={...(os.assinaturas||{}),[type]:data};
-    await updateDoc(doc(db,'ordens',id),{assinaturas,atualizadoEm:new Date().toISOString()});
-    const idx=ordensCache.findIndex(o=>o.idDoc===id); if(idx>=0)ordensCache[idx].assinaturas=assinaturas;
-    signatureDirty[type]=false;
-    document.getElementById(type+'-sign-status').textContent='Assinatura salva na OS.';
-    alert('Assinatura salva.');
+    
+    const c = document.getElementById('signature-' + type);
+    const data = c.toDataURL('image/png');
+    
+    signatures[type] = data;
+    const os = ordensCache.find(o => o.idDoc === id) || currentOS || {};
+    const assinaturas = { ...(os.assinaturas || {}), [type]: data };
+    
+    try {
+      await updateDoc(doc(db, 'ordens', id), { assinaturas, atualizadoEm: new Date().toISOString() });
+      const idx = ordensCache.findIndex(o => o.idDoc === id); 
+      if(idx >= 0) ordensCache[idx].assinaturas = assinaturas;
+      signatureDirty[type] = false;
+      document.getElementById(type + '-sign-status').textContent = 'Assinatura salva na OS com sucesso.';
+      alert('Assinatura salva com sucesso!');
+    } catch(e) {
+      console.error(e);
+      alert('Erro ao salvar assinatura.');
+    }
   };
 
-  window.openModal=function(){
+  window.openModal = function(){
     document.getElementById('os-form').reset();document.getElementById('os-id').value='';
     document.getElementById('modal-title').textContent='Nova Ordem de Serviço';document.getElementById('modal-os-id').textContent='';
     document.getElementById('document-section').classList.add('hidden');document.getElementById('btn-doc-nova').classList.remove('hidden');
-    signatures.cliente='';signatures.assistencia='';resetPhotoState({});calcFinance();currentOS=null;
-    document.getElementById('os-modal').style.display='flex';icons();
+    signatures.cliente=''; signatures.assistencia=''; resetPhotoState({}); calcFinance(); currentOS=null;
+    document.getElementById('os-modal').style.display='flex';
+    icons();
   };
 
-  window.abrirDocumentoNovaOS=function(){ alert('Primeiro salve a OS. Depois você poderá gerar o documento e colher as assinaturas.'); };
-  window.closeModal=function(){document.getElementById('os-modal').style.display='none';};
-  window.excluirOS=async function(id){
-    if(!confirm('Deseja realmente excluir esta OS e seus registros?'))return;
-    try{await deleteDoc(doc(db,'ordens',id));await carregarOS();}catch(e){console.error(e);alert('Erro ao excluir.');}
+  window.abrirDocumentoNovaOS = function(){ alert('Primeiro salve a OS. Depois você poderá gerar o documento e colher as assinaturas.'); };
+  window.closeModal = function(){ document.getElementById('os-modal').style.display='none'; };
+  
+  window.excluirOS = async function(id){
+    if(!confirm('Deseja realmente excluir esta OS e seus registros?')) return;
+    try { await deleteDoc(doc(db, 'ordens', id)); await carregarOS(); } catch(e){ console.error(e); alert('Erro ao excluir.'); }
   };
 
-  window.sendWhatsApp=function(telefone,nome,aparelho,status){
-    let numero=String(telefone).replace(/\D/g,'');if(!numero.startsWith('55'))numero='55'+numero;
-    let mensagem=`Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\nAtualização sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
-    if(status==='Pronto')mensagem+='Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n';
-    else if(status==='Aguardando Aprovação')mensagem+='O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n';
-    else if(status==='Aguardando Peça')mensagem+='Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n';
-    mensagem+='Qualquer dúvida, estamos à disposição!';
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`,'_blank');
+  window.sendWhatsApp = function(telefone, nome, aparelho, status){
+    let numero = String(telefone).replace(/\D/g,''); if(!numero.startsWith('55')) numero = '55' + numero;
+    let mensagem = `Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\nAtualização sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
+    if(status === 'Pronto') mensagem += 'Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n';
+    else if(status === 'Aguardando Aprovação') mensagem += 'O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n';
+    else if(status === 'Aguardando Peça') mensagem += 'Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n';
+    mensagem += 'Qualquer dúvida, estamos à disposição!';
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
   };
 
-  function osById(id){return ordensCache.find(o=>o.idDoc===id)||null;}
-  window.abrirDocumentoPorId=function(id){
-    const os=osById(id);if(!os)return;
-    currentOS=os;document.getElementById('document-preview-content').innerHTML=buildDocumentHTML(os);
-    document.getElementById('document-modal').style.display='flex';icons();
+  function osById(id){ return ordensCache.find(o => o.idDoc === id) || null; }
+  
+  window.abrirDocumentoPorId = function(id){
+    const os = osById(id); if(!os) return;
+    currentOS = os;
+    document.getElementById('document-preview-content').innerHTML = buildDocumentHTML(os);
+    document.getElementById('document-modal').style.display='flex';
+    icons();
   };
-  window.openDocumentPreview=function(){
-    const id=document.getElementById('os-id').value;const os=osById(id)||currentOS;
-    if(!os){alert('Salve a OS primeiro.');return;}
-    document.getElementById('document-preview-content').innerHTML=buildDocumentHTML(os);
-    document.getElementById('document-modal').style.display='flex';icons();
+  
+  window.openDocumentPreview = function(){
+    const id = document.getElementById('os-id').value;
+    const os = osById(id) || currentOS;
+    if(!os){ alert('Salve a OS primeiro.'); return; }
+    document.getElementById('document-preview-content').innerHTML = buildDocumentHTML(os);
+    document.getElementById('document-modal').style.display='flex';
+    icons();
   };
-  window.closeDocumentPreview=function(){document.getElementById('document-modal').style.display='none';};
+  
+  window.closeDocumentPreview = function(){ document.getElementById('document-modal').style.display='none'; };
 
   function documentData(os){
     return {
@@ -734,9 +841,9 @@ Este documento registra as condições da OS e não pretende afastar direitos as
   }
 
   function buildDocumentHTML(os){
-    const d=documentData(os);
-    const fotos=Object.entries(d.fotos).filter(([,v])=>v?.url);
-    const terms=nl2br(d.termosVersao);
+    const d = documentData(os);
+    const fotos = Object.entries(d.fotos).filter(([,v])=>v?.url);
+    const terms = nl2br(d.termosVersao);
     return `<div class="bg-white max-w-[794px] mx-auto shadow-sm p-6 sm:p-10 text-slate-900 text-sm leading-6">
       <div class="border-b-2 border-slate-900 pb-4 mb-5 flex flex-col sm:flex-row justify-between gap-4">
         <div><h1 class="text-xl sm:text-2xl font-bold">MACKSON TECHNOLOGY</h1><p class="text-xs text-slate-500">ORDEM DE SERVIÇO — DOCUMENTO DE ENTRADA E AUTORIZAÇÃO</p></div>
@@ -765,54 +872,46 @@ Este documento registra as condições da OS e não pretende afastar direitos as
     </div>`;
   }
 
-  window.printOS=function(){
-    const os=currentOS||osById(document.getElementById('os-id').value);
-    if(!os){alert('Salve a OS primeiro.');return;}
-    document.getElementById('print-document').innerHTML=buildDocumentHTML(os);
+  window.printOS = function(){
+    const os = currentOS || osById(document.getElementById('os-id').value);
+    if(!os){ alert('Salve a OS primeiro.'); return; }
+    document.getElementById('print-document').innerHTML = buildDocumentHTML(os);
     document.getElementById('print-document').classList.remove('hidden');
-    setTimeout(()=>{window.print();setTimeout(()=>document.getElementById('print-document').classList.add('hidden'),500);},100);
+    setTimeout(()=>{ window.print(); setTimeout(()=>document.getElementById('print-document').classList.add('hidden'), 500); }, 100);
   };
 
-  async function snapshotTermsForOS(id){
-    const texto=document.getElementById('termos-editor')?.value?.trim() || termosAtuais || DEFAULT_TERMS;
+  window.downloadDOCX = async function(){
+    const os = currentOS || osById(document.getElementById('os-id').value);
+    if(!os){ alert('Salve a OS primeiro.'); return; }
     try{
-      await updateDoc(doc(db,'ordens',id),{termosSnapshot:texto});
-      return texto;
-    }catch(e){console.warn('Não foi possível registrar snapshot dos termos',e);return texto;}
-  }
-
-  window.downloadDOCX=async function(){
-    const os=currentOS||osById(document.getElementById('os-id').value);
-    if(!os){alert('Salve a OS primeiro.');return;}
-    try{
-      const D=window.docx;
-      if(!D){alert('Biblioteca DOCX não carregou. Verifique sua conexão.');return;}
-      const d=documentData(os);
-      const children=[];
-      children.push(new D.Paragraph({text:'MACKSON TECHNOLOGY',heading:D.HeadingLevel.TITLE}));
+      const D = window.docx;
+      if(!D){ alert('Biblioteca DOCX não carregou. Verifique sua conexão.'); return; }
+      const d = documentData(os);
+      const children = [];
+      children.push(new D.Paragraph({text:'MACKSON TECHNOLOGY', heading:D.HeadingLevel.TITLE}));
       children.push(new D.Paragraph({text:`ORDEM DE SERVIÇO — OS #${os.idDoc}`}));
       children.push(new D.Paragraph({text:`Data: ${d.data}`}));
-      children.push(new D.Paragraph({text:'1. CLIENTE',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:'1. CLIENTE', heading:D.HeadingLevel.HEADING_1}));
       children.push(new D.Paragraph({text:`Nome: ${d.nome} | WhatsApp: ${d.telefone}${d.cpf?' | CPF: '+d.cpf:''}`}));
-      children.push(new D.Paragraph({text:'2. APARELHO',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:'2. APARELHO', heading:D.HeadingLevel.HEADING_1}));
       children.push(new D.Paragraph({text:`Marca: ${d.marca||'Não informado'} | Modelo: ${d.aparelho}`}));
       children.push(new D.Paragraph({text:`IMEI: ${d.imei||'Não informado'} | Nº de série: ${d.serial||'Não informado'}`}));
       children.push(new D.Paragraph({text:`Defeito / relato: ${d.defeito}`}));
       children.push(new D.Paragraph({text:`Estado físico: ${d.estadoFisico||'Não informado'}`}));
       children.push(new D.Paragraph({text:`Acessórios: ${d.acessorios||'Não informado'}`}));
-      children.push(new D.Paragraph({text:'3. TERMOS E CONDIÇÕES',heading:D.HeadingLevel.HEADING_1}));
-      d.termosVersao.split(/\n+/).forEach(t=>{if(t.trim())children.push(new D.Paragraph({text:t.trim()}));});
-      children.push(new D.Paragraph({text:'4. INFORMAÇÕES DO SERVIÇO',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:'3. TERMOS E CONDIÇÕES', heading:D.HeadingLevel.HEADING_1}));
+      d.termosVersao.split(/\n+/).forEach(t=>{ if(t.trim()) children.push(new D.Paragraph({text:t.trim()})); });
+      children.push(new D.Paragraph({text:'4. INFORMAÇÕES DO SERVIÇO', heading:D.HeadingLevel.HEADING_1}));
       children.push(new D.Paragraph({text:`Status: ${d.status}`}));
       children.push(new D.Paragraph({text:`Valor final: ${money(d.valorFinal)} | Desconto: ${money(d.desconto)} | Total: ${money(d.totalPagar)}`}));
       children.push(new D.Paragraph({text:`Pago: ${money(d.valorPago)} | Pendente: ${money(d.valorPendente)} | Forma: ${d.formaPagamento||'Não informado'}`}));
-      children.push(new D.Paragraph({text:'5. ASSINATURAS',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:'5. ASSINATURAS', heading:D.HeadingLevel.HEADING_1}));
       children.push(new D.Paragraph({text:'____________________________________________\nAssinatura do cliente'}));
       children.push(new D.Paragraph({text:'____________________________________________\nAssinatura da assistência'}));
-      const docxFile=new D.Document({sections:[{properties:{},children}]});
-      const blob=await D.Packer.toBlob(docxFile);
-      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`OS-${os.idDoc}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-    }catch(e){console.error(e);alert('Erro ao gerar DOCX.');}
+      const docxFile = new D.Document({sections:[{properties:{},children}]});
+      const blob = await D.Packer.toBlob(docxFile);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `OS-${os.idDoc}.docx`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    }catch(e){ console.error(e); alert('Erro ao gerar DOCX.'); }
   };
 
   const googleProvider = new GoogleAuthProvider();
@@ -846,15 +945,15 @@ Este documento registra as condições da OS e não pretende afastar direitos as
     }
   });
 
-  window.logout=async function(){await signOut(auth);};
+  window.logout = async function(){ await signOut(auth); };
 
-  onAuthStateChanged(auth,async user=>{
-    const login=document.getElementById('login-screen'),appEl=document.getElementById('app-screen');
+  onAuthStateChanged(auth, async user => {
+    const login = document.getElementById('login-screen'), appEl = document.getElementById('app-screen');
     if(user){
-      login.classList.add('hidden');appEl.classList.remove('hidden');document.getElementById('user-email').textContent=user.email||'Usuário autenticado';
-      await carregarTermos();await carregarOS();icons();
+      login.classList.add('hidden'); appEl.classList.remove('hidden'); document.getElementById('user-email').textContent = user.email || 'Usuário autenticado';
+      await carregarTermos(); await carregarOS(); icons();
     }else{
-      appEl.classList.add('hidden');login.classList.remove('hidden');
+      appEl.classList.add('hidden'); login.classList.remove('hidden');
     }
   });
 
