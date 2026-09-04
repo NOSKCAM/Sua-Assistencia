@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sua Asistência OS - MACKSON TEHCNOLOGY </title>
-  
+  <title>Mackson Technology OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/build/index.umd.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -15,355 +14,809 @@
           colors: { brand: '#165EF0', 'brand-dark': '#1148BD' }
         }
       }
-    }
+    };
   </script>
+  <style>
+    .modal-scroll { scrollbar-width: thin; }
+    canvas.signature-pad { touch-action: none; }
+    @media print {
+      body > *:not(#print-document) { display: none !important; }
+      #print-document { display: block !important; }
+      @page { size: A4; margin: 12mm; }
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans flex min-h-screen overflow-hidden">
+<body class="bg-slate-50 text-slate-800 antialiased font-sans min-h-screen">
 
-  <!-- BARRA LATERAL -->
-  <aside class="w-72 bg-white border-r border-slate-200 flex flex-col z-40">
-    <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
-      <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
-        OS
-      </div>
-      <div>
-        <span class="font-bold text-slate-900 text-lg leading-none block"> Mackson Tech OS - Sua Assitência </span>
-        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Firebase Nuvem</span>
+  <!-- LOGIN -->
+  <section id="login-screen" class="min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-md">
+      <div class="bg-white border border-slate-200 rounded-3xl shadow-xl p-8">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-12 h-12 bg-brand rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25">OS</div>
+          <div>
+            <h1 class="font-bold text-xl text-slate-900">Mackson Technology</h1>
+            <p class="text-xs text-slate-500">Gestão de Ordens de Serviço</p>
+          </div>
+        </div>
+        <h2 class="text-lg font-bold text-slate-900 mb-1">Entrar</h2>
+        <p class="text-sm text-slate-500 mb-6">Acesse seu painel de assistência técnica.</p>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 mb-1">E-mail</label>
+            <input id="login-email" type="email" autocomplete="email" required
+              class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-brand focus:ring-2 focus:ring-blue-100">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 mb-1">Senha</label>
+            <input id="login-password" type="password" autocomplete="current-password" required
+              class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-brand focus:ring-2 focus:ring-blue-100">
+          </div>
+          <button id="btn-login" type="submit"
+            class="w-full bg-brand hover:bg-brand-dark text-white font-semibold py-3 rounded-xl transition disabled:opacity-60">
+            Entrar
+          </button>
+          <button id="btn-reset-password" type="button" class="w-full text-sm text-brand hover:underline">
+            Esqueci minha senha
+          </button>
+          <p id="login-error" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl p-3"></p>
+        </form>
       </div>
     </div>
+  </section>
 
-    <nav class="flex-1 overflow-y-auto p-4 space-y-6">
-      <div>
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Menu Principal</p>
-        <div class="space-y-1">
-          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm">
-            <div class="flex items-center gap-3">
-              <i data-lucide="file-text" class="w-5 h-5"></i>
-              <span>Ordens de Serviço</span>
-            </div>
-          </a>
+  <!-- APP -->
+  <div id="app-screen" class="hidden min-h-screen">
+    <aside class="fixed inset-y-0 left-0 w-72 bg-white border-r border-slate-200 flex flex-col z-40">
+      <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
+        <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">OS</div>
+        <div>
+          <span class="font-bold text-slate-900 text-lg leading-none block">Mackson Tech OS</span>
+          <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded mt-1 inline-block">Firebase</span>
         </div>
       </div>
-    </nav>
-  </aside>
-
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main class="flex-1 flex flex-col h-screen overflow-hidden">
-    
-    <!-- Header -->
-    <div class="p-8 pb-4 flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-slate-900">Ordens de Serviço</h1>
-        <p class="text-sm text-slate-500">Dados salvos na nuvem e envio direto para o WhatsApp do cliente.</p>
-      </div>
-      
-      <button onclick="openModal()" class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
-        <i data-lucide="plus" class="w-5 h-5"></i>
-        <span>Nova OS</span>
-      </button>
-    </div>
-
-    <!-- Tabela de OS -->
-    <div class="flex-1 p-8 pt-0 overflow-auto">
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
-              <th class="p-4">Foto</th>
-              <th class="p-4">Cliente / Contato</th>
-              <th class="p-4">Aparelho / Defeito</th>
-              <th class="p-4">Status</th>
-              <th class="p-4 text-right">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="os-table-body" class="divide-y divide-slate-100 text-sm">
-            <!-- Inserido via JS -->
-          </tbody>
-        </table>
-        
-        <div id="loading-state" class="flex flex-col items-center justify-center p-12 text-slate-400">
-          <i data-lucide="loader-2" class="w-8 h-8 mb-3 animate-spin text-brand"></i>
-          <p class="font-medium text-sm">Carregando ordens de serviço do Firebase...</p>
-        </div>
-
-        <div id="empty-state" class="hidden flex-col items-center justify-center p-12 text-slate-400">
-          <i data-lucide="inbox" class="w-12 h-12 mb-3 text-slate-300"></i>
-          <p class="font-medium">Nenhuma Ordem de Serviço cadastrada.</p>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- MODAL DE NOVA/EDITAR OS -->
-  <div id="os-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden max-h-[90vh] flex flex-col">
-      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-        <h2 class="font-bold text-lg text-slate-800" id="modal-title">Nova Ordem de Serviço</h2>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700">
-          <i data-lucide="x" class="w-5 h-5"></i>
+      <nav class="flex-1 p-4 space-y-2">
+        <button onclick="showSection('ordens')" id="nav-ordens"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm">
+          <i data-lucide="file-text" class="w-5 h-5"></i><span>Ordens de Serviço</span>
+        </button>
+        <button onclick="showSection('termos')" id="nav-termos"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-sm">
+          <i data-lucide="file-cog" class="w-5 h-5"></i><span>Termos e Condições</span>
+        </button>
+      </nav>
+      <div class="p-4 border-t border-slate-100">
+        <div class="text-xs text-slate-500 mb-3 truncate" id="user-email"></div>
+        <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-semibold text-sm">
+          <i data-lucide="log-out" class="w-4 h-4"></i>Sair
         </button>
       </div>
-      
-      <form id="os-form" onsubmit="saveOS(event)" class="p-5 space-y-4 overflow-y-auto flex-1">
+    </aside>
+
+    <main class="ml-72 min-h-screen">
+      <!-- ORDENS -->
+      <section id="section-ordens">
+        <div class="p-8 pb-4 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Ordens de Serviço</h1>
+            <p class="text-sm text-slate-500">Clientes, aparelhos, fotos, financeiro e documentos em um só lugar.</p>
+          </div>
+          <button onclick="openModal()" class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
+            <i data-lucide="plus" class="w-5 h-5"></i><span>Nova OS</span>
+          </button>
+        </div>
+        <div class="p-8 pt-2">
+          <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[900px]">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                    <th class="p-4">Foto</th><th class="p-4">Cliente / Contato</th><th class="p-4">Aparelho / Defeito</th>
+                    <th class="p-4">Financeiro</th><th class="p-4">Status</th><th class="p-4 text-right">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="os-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+              </table>
+            </div>
+            <div id="loading-state" class="flex flex-col items-center justify-center p-12 text-slate-400">
+              <i data-lucide="loader-2" class="w-8 h-8 mb-3 animate-spin text-brand"></i>
+              <p class="font-medium text-sm">Carregando ordens de serviço...</p>
+            </div>
+            <div id="empty-state" class="hidden flex-col items-center justify-center p-12 text-slate-400">
+              <i data-lucide="inbox" class="w-12 h-12 mb-3 text-slate-300"></i>
+              <p class="font-medium">Nenhuma Ordem de Serviço cadastrada.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TERMOS -->
+      <section id="section-termos" class="hidden">
+        <div class="p-8 pb-4">
+          <h1 class="text-2xl font-bold text-slate-900">Termos e Condições</h1>
+          <p class="text-sm text-slate-500">Edite o texto que será usado nos novos documentos das OS.</p>
+        </div>
+        <div class="p-8 pt-2">
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 max-w-5xl">
+            <div class="flex items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 class="font-bold text-slate-900">Texto padrão do documento</h2>
+                <p class="text-xs text-slate-500 mt-1">Alterações futuras não modificam o texto já registrado em documentos assinados.</p>
+              </div>
+              <button onclick="salvarTermos()" id="btn-salvar-termos" class="bg-brand hover:bg-brand-dark text-white px-4 py-2.5 rounded-xl font-semibold text-sm">Salvar termos</button>
+            </div>
+            <textarea id="termos-editor" rows="24"
+              class="w-full p-4 border border-slate-200 rounded-xl focus:outline-none focus:border-brand font-mono text-sm leading-6"></textarea>
+            <p id="termos-status" class="text-xs text-slate-500 mt-3"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- OS MODAL -->
+  <div id="os-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden max-h-[94vh] flex flex-col">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <div>
+          <h2 class="font-bold text-lg text-slate-800" id="modal-title">Nova Ordem de Serviço</h2>
+          <p id="modal-os-id" class="text-xs text-slate-500 mt-0.5"></p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form id="os-form" onsubmit="saveOS(event)" class="p-5 space-y-6 overflow-y-auto modal-scroll flex-1">
         <input type="hidden" id="os-id">
-        
+
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Nome do Cliente</label>
-          <input type="text" id="os-nome" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+          <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4 text-brand"></i>Cliente</h3>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="md:col-span-1">
+              <label class="block text-xs font-semibold text-slate-500 mb-1">Nome *</label>
+              <input type="text" id="os-nome" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1">WhatsApp *</label>
+              <input type="text" id="os-telefone" placeholder="DDD + número" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1">CPF <span class="font-normal text-slate-400">(opcional)</span></label>
+              <input type="text" id="os-cpf" inputmode="numeric" placeholder="000.000.000-00" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+            </div>
+          </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">WhatsApp (com DDD)</label>
-          <input type="text" id="os-telefone" placeholder="Ex: 11999999999" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+          <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4 text-brand"></i>Aparelho</h3>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Marca <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-marca" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Modelo <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-aparelho" required placeholder="Ex.: iPhone 11" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">IMEI <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-imei" inputmode="numeric" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Número de série <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-serial" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div class="md:col-span-2"><label class="block text-xs font-semibold text-slate-500 mb-1">Defeito / relato *</label><textarea id="os-defeito" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20"></textarea></div>
+          </div>
+          <div class="mt-4 grid md:grid-cols-2 gap-4">
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Estado físico / observações <span class="font-normal text-slate-400">(opcional)</span></label><textarea id="os-estado" placeholder="Riscos, trincas, amassados, manchas etc." class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20"></textarea></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Acessórios entregues <span class="font-normal text-slate-400">(opcional)</span></label><textarea id="os-acessorios" placeholder="Capa, carregador, cabo..." class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20"></textarea></div>
+          </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Aparelho</label>
-          <input type="text" id="os-aparelho" placeholder="Ex: iPhone 11 / Samsung S20" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+          <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><i data-lucide="wallet" class="w-4 h-4 text-brand"></i>Financeiro</h3>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor do orçamento</label><input id="os-orcamento" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor final do reparo</label><input id="os-valor-final" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Desconto</label><input id="os-desconto" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Total a pagar <span class="text-brand">(automático)</span></label><input id="os-total" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor pago</label><input id="os-pago" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor pendente <span class="text-brand">(automático)</span></label><input id="os-pendente" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Forma de pagamento</label>
+              <select id="os-pagamento" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+                <option value="">Não informado</option><option>Pix</option><option>Dinheiro</option><option>Cartão de débito</option><option>Cartão de crédito</option><option>Transferência</option><option>Outro</option>
+              </select>
+            </div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Situação</label>
+              <select id="os-situacao-pagamento" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+                <option value="Pendente">Pendente</option><option value="Parcialmente pago">Parcialmente pago</option><option value="Pago">Pago</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Defeito / Relato</label>
-          <textarea id="os-defeito" required class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20"></textarea>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Status da OS</label>
-          <select id="os-status" class="w-full p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
-            <option value="Recebido">Recebido na Bancada</option>
-            <option value="Em Orçamento">Em Orçamento</option>
-            <option value="Aguardando Aprovação">Aguardando Aprovação do Cliente</option>
-            <option value="Aguardando Peça">Aguardando Peça</option>
-            <option value="Em Reparo">Em Reparo</option>
-            <option value="Pronto">Pronto para Retirada</option>
-            <option value="Entregue">Entregue (Finalizado)</option>
+          <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-brand"></i>Status</h3>
+          <select id="os-status" class="w-full md:w-1/2 p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand">
+            <option value="Recebido">Recebido na Bancada</option><option value="Em Orçamento">Em Orçamento</option><option value="Aguardando Aprovação">Aguardando Aprovação do Cliente</option><option value="Aguardando Peça">Aguardando Peça</option><option value="Em Reparo">Em Reparo</option><option value="Pronto">Pronto para Retirada</option><option value="Entregue">Entregue (Finalizado)</option>
           </select>
         </div>
 
+        <!-- FOTOS -->
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Foto do Aparelho (Opcional)</label>
-          <input type="file" id="os-foto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-brand hover:file:bg-blue-100">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-slate-900 flex items-center gap-2"><i data-lucide="camera" class="w-4 h-4 text-brand"></i>Fotos do aparelho</h3>
+            <span class="text-xs text-slate-400">Todas opcionais</span>
+          </div>
+          <div id="photo-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
         </div>
 
-        <div class="pt-2 flex justify-end gap-3">
-          <button type="button" onclick="closeModal()" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition">Cancelar</button>
-          <button type="submit" id="btn-salvar" class="px-4 py-2 bg-brand text-white font-medium hover:bg-brand-dark rounded-lg transition">Salvar OS</button>
+        <!-- DOCUMENTO / ASSINATURAS -->
+        <div id="document-section" class="hidden border-t border-slate-200 pt-6">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 flex items-center gap-2"><i data-lucide="file-signature" class="w-4 h-4 text-brand"></i>Documento e assinaturas</h3>
+              <p class="text-xs text-slate-500">O documento usa a versão dos termos registrada nesta OS.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="openDocumentPreview()" class="px-3 py-2 rounded-lg border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50">Visualizar</button>
+              <button type="button" onclick="printOS()" class="px-3 py-2 rounded-lg bg-slate-800 text-white text-sm font-semibold hover:bg-slate-900">Imprimir</button>
+              <button type="button" onclick="downloadDOCX()" class="px-3 py-2 rounded-lg bg-brand text-white text-sm font-semibold hover:bg-brand-dark">Baixar DOCX</button>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="border border-slate-200 rounded-xl p-3">
+              <div class="flex justify-between items-center mb-2"><span class="text-sm font-semibold">Assinatura do cliente</span><button type="button" onclick="clearSignature('cliente')" class="text-xs text-red-500">Limpar</button></div>
+              <canvas id="signature-cliente" class="signature-pad w-full h-36 border border-dashed border-slate-300 rounded-lg bg-white"></canvas>
+              <button type="button" onclick="salvarAssinatura('cliente')" class="mt-2 w-full py-2 bg-blue-50 text-brand rounded-lg text-sm font-semibold">Salvar assinatura do cliente</button>
+              <div id="cliente-sign-status" class="text-xs text-slate-500 mt-2"></div>
+            </div>
+            <div class="border border-slate-200 rounded-xl p-3">
+              <div class="flex justify-between items-center mb-2"><span class="text-sm font-semibold">Assinatura da assistência</span><button type="button" onclick="clearSignature('assistencia')" class="text-xs text-red-500">Limpar</button></div>
+              <canvas id="signature-assistencia" class="signature-pad w-full h-36 border border-dashed border-slate-300 rounded-lg bg-white"></canvas>
+              <button type="button" onclick="salvarAssinatura('assistencia')" class="mt-2 w-full py-2 bg-blue-50 text-brand rounded-lg text-sm font-semibold">Salvar assinatura da assistência</button>
+              <div id="assistencia-sign-status" class="text-xs text-slate-500 mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap justify-between gap-3 border-t border-slate-100">
+          <div class="flex gap-2">
+            <button type="button" id="btn-doc-nova" onclick="abrirDocumentoNovaOS()" class="hidden px-4 py-2 text-brand bg-blue-50 font-semibold rounded-lg">Gerar documento</button>
+          </div>
+          <div class="flex gap-3">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg">Cancelar</button>
+            <button type="submit" id="btn-salvar" class="px-5 py-2 bg-brand text-white font-semibold hover:bg-brand-dark rounded-lg">Salvar OS</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- FIREBASE SDKs (Modular CDN) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+  <!-- DOCUMENT PREVIEW -->
+  <div id="document-modal" class="fixed inset-0 bg-slate-900/70 z-[60] hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden">
+      <div class="p-4 border-b flex justify-between items-center">
+        <h2 class="font-bold">Documento da OS</h2>
+        <button onclick="closeDocumentPreview()" class="text-slate-500"><i data-lucide="x"></i></button>
+      </div>
+      <div id="document-preview-content" class="overflow-y-auto p-8 bg-slate-100"></div>
+      <div class="p-4 border-t flex justify-end gap-2">
+        <button onclick="printOS()" class="px-4 py-2 bg-slate-800 text-white rounded-lg font-semibold">Imprimir</button>
+        <button onclick="downloadDOCX()" class="px-4 py-2 bg-brand text-white rounded-lg font-semibold">Baixar DOCX</button>
+      </div>
+    </div>
+  </div>
 
-    // Configuração do Firebase fornecida
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOzwAT4oWzJuq5O0Qj_TpCUgbWwIxpLZ4",
-      authDomain: "sua-assistencia.firebaseapp.com",
-      projectId: "sua-assistencia",
-      storageBucket: "sua-assistencia.firebasestorage.app",
-      messagingSenderId: "700070354483",
-      appId: "1:700070354483:web:b761d6faef14120bed0d46"
+  <div id="print-document" class="hidden"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import {
+    getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc,
+    getDoc, setDoc, query, where, orderBy
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+  import {
+    getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDOzwAT4oWzJuq5O0Qj_TpCUgbWwIxpLZ4",
+    authDomain: "sua-assistencia.firebaseapp.com",
+    projectId: "sua-assistencia",
+    storageBucket: "sua-assistencia.firebasestorage.app",
+    messagingSenderId: "700070354483",
+    appId: "1:700070354483:web:b761d6faef14120bed0d46"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+  const auth = getAuth(app);
+
+  const statusColors = {
+    'Recebido':'bg-slate-100 text-slate-600','Em Orçamento':'bg-amber-100 text-amber-700',
+    'Aguardando Aprovação':'bg-orange-100 text-orange-700','Aguardando Peça':'bg-red-100 text-red-700',
+    'Em Reparo':'bg-blue-100 text-blue-700','Pronto':'bg-emerald-100 text-emerald-700',
+    'Entregue':'bg-purple-100 text-purple-700'
+  };
+
+  const photoTypes = [
+    ['frente','Frente','smartphone'],['traseira','Traseira','smartphone'],
+    ['tela','Tela','scan-line'],['laterais','Laterais','move-horizontal'],
+    ['estadoFisico','Estado físico','search'],['acessorios','Acessórios entregues','package']
+  ];
+
+  const DEFAULT_TERMS = `1. TERMO DE ENTRADA
+O cliente declara entregar o aparelho identificado neste documento para avaliação e/ou execução do serviço solicitado, ficando registradas as condições informadas no momento da entrada.
+
+2. AUTORIZAÇÃO PARA DIAGNÓSTICO E REPARO
+O cliente autoriza a assistência técnica a realizar diagnóstico, testes técnicos e os procedimentos necessários ao serviço autorizado, dentro do escopo combinado com o cliente.
+
+3. DADOS E ACESSÓRIOS
+O cliente declara ser responsável pelos dados armazenados no aparelho e fica ciente da importância de possuir backup. A assistência não deverá acessar conteúdo pessoal além do estritamente necessário à execução de testes e do serviço autorizado. Os acessórios recebidos serão aqueles descritos na OS.
+
+4. ESTADO FÍSICO E REGISTRO
+As condições aparentes do aparelho e os acessórios entregues serão registradas na OS e, quando houver, por fotografias. Danos, marcas ou defeitos preexistentes devem ser considerados conforme o registro realizado na entrada.
+
+5. TERMO DE RESPONSABILIDADE
+A assistência realizará o serviço com diligência técnica compatível com a natureza do reparo. O cliente declara ciência de que determinados procedimentos técnicos podem envolver riscos inerentes ao equipamento, especialmente quando houver danos preexistentes, oxidação, componentes comprometidos ou intervenções anteriores.
+
+6. PEÇAS E SERVIÇO
+Quando houver substituição de componente, o serviço e a peça utilizada serão registrados na OS quando aplicável. Qualquer alteração relevante de escopo ou custo deverá ser comunicada ao cliente antes da execução, sempre que possível.
+
+7. GARANTIA E CONDIÇÕES DO SERVIÇO
+A garantia aplicável ao serviço e/ou peça será informada pela assistência conforme o caso concreto e deverá respeitar a legislação aplicável. A garantia não se confunde com cobertura para novos danos, mau uso, acidentes, líquidos ou intervenções posteriores de terceiros, quando tais fatos forem comprovadamente relacionados ao problema apresentado.
+
+8. TERMO DE RETIRADA
+No momento da retirada, o cliente declara receber o aparelho e os acessórios registrados, podendo conferir o equipamento. A retirada e o encerramento da OS poderão ser registrados no sistema juntamente com a assinatura do cliente.
+
+9. CIÊNCIA E ACEITE
+Ao assinar este documento, o cliente declara que recebeu as informações nele registradas, autorizou os procedimentos descritos e teve oportunidade de esclarecer dúvidas antes da execução do serviço.
+
+Este documento registra as condições da OS e não pretende afastar direitos assegurados pela legislação aplicável.`;
+
+  let ordensCache = [];
+  let currentOS = null;
+  let termosAtuais = DEFAULT_TERMS;
+  const photoState = {};
+  const signatures = { cliente:'', assistencia:'' };
+  const signatureDirty = { cliente:false, assistencia:false };
+
+  const money = n => Number(n || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const num = id => Math.max(0, Number(document.getElementById(id)?.value || 0));
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  const nl2br = s => esc(s).replace(/\n/g,'<br>');
+  const formatCPF = v => {
+    const d = String(v||'').replace(/\D/g,'').slice(0,11);
+    return d.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  };
+
+  function icons(){ if(window.lucide) lucide.createIcons(); }
+
+  window.showSection = function(section){
+    document.getElementById('section-ordens').classList.toggle('hidden', section !== 'ordens');
+    document.getElementById('section-termos').classList.toggle('hidden', section !== 'termos');
+    document.getElementById('nav-ordens').className = section === 'ordens'
+      ? 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm'
+      : 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-sm';
+    document.getElementById('nav-termos').className = section === 'termos'
+      ? 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm'
+      : 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-sm';
+    if(section === 'termos') carregarTermos();
+  };
+
+  async function carregarTermos(){
+    try{
+      const snap = await getDoc(doc(db,'config','termos'));
+      termosAtuais = snap.exists() && snap.data().texto ? snap.data().texto : DEFAULT_TERMS;
+      document.getElementById('termos-editor').value = termosAtuais;
+      document.getElementById('termos-status').textContent = snap.exists() ? 'Termos carregados do Firebase.' : 'Usando termos padrão. Salve para gravar no Firebase.';
+    }catch(e){
+      console.error(e);
+      document.getElementById('termos-editor').value = termosAtuais;
+      document.getElementById('termos-status').textContent = 'Não foi possível carregar os termos. Verifique as regras do Firestore.';
+    }
+  }
+
+  window.salvarTermos = async function(){
+    const btn = document.getElementById('btn-salvar-termos');
+    const status = document.getElementById('termos-status');
+    const texto = document.getElementById('termos-editor').value.trim();
+    if(!texto) return alert('O texto dos termos não pode ficar vazio.');
+    btn.disabled = true; btn.textContent = 'Salvando...';
+    try{
+      await setDoc(doc(db,'config','termos'),{
+        texto,
+        atualizadoEm: new Date().toISOString(),
+        atualizadoPor: auth.currentUser?.uid || null
+      },{merge:true});
+      termosAtuais = texto;
+      status.textContent = 'Termos salvos com sucesso.';
+    }catch(e){
+      console.error(e); alert('Erro ao salvar os termos no Firebase.');
+    }finally{ btn.disabled=false; btn.textContent='Salvar termos'; }
+  };
+
+  function renderPhotoInputs(os = {}){
+    const grid = document.getElementById('photo-grid');
+    grid.innerHTML = '';
+    photoTypes.forEach(([key,label,icon]) => {
+      const item = photoState[key] || {};
+      grid.insertAdjacentHTML('beforeend',`
+        <div class="border border-slate-200 rounded-xl p-3">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-semibold">${label}</span>
+            ${item.url ? '<span class="text-[10px] text-emerald-600 font-bold">SALVA</span>':''}
+          </div>
+          <div class="aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex items-center justify-center mb-2">
+            ${item.url ? `<img src="${esc(item.url)}" class="w-full h-full object-cover cursor-pointer" onclick="window.open('${esc(item.url)}','_blank')">`
+              : `<i data-lucide="${icon}" class="w-7 h-7 text-slate-300"></i>`}
+          </div>
+          <input type="file" accept="image/*" capture="environment" data-photo-input="${key}" class="w-full text-[10px] text-slate-500">
+          ${item.url ? `<button type="button" onclick="removerFoto('${key}')" class="mt-2 w-full py-1.5 rounded-lg text-xs font-semibold text-red-600 bg-red-50">Remover referência</button>`:''}
+        </div>`);
+    });
+    grid.querySelectorAll('[data-photo-input]').forEach(input=>{
+      input.addEventListener('change',()=>{ photoState[input.dataset.photoInput].file = input.files[0] || null; });
+    });
+    icons();
+  }
+
+  function resetPhotoState(os={}){
+    Object.keys(photoState).forEach(k=>delete photoState[k]);
+    photoTypes.forEach(([key])=>photoState[key]={url:os.fotos?.[key]?.url || '', path:os.fotos?.[key]?.path || '', file:null});
+    renderPhotoInputs(os);
+  }
+
+  window.removerFoto = function(key){
+    if(!photoState[key]) return;
+    photoState[key].remove = true;
+    photoState[key].url = '';
+    photoState[key].file = null;
+    renderPhotoInputs();
+  };
+
+  function calcFinance(){
+    const total = Math.max(0, num('os-valor-final') - num('os-desconto'));
+    const pago = num('os-pago');
+    const pend = Math.max(0, total - pago);
+    document.getElementById('os-total').value = money(total);
+    document.getElementById('os-pendente').value = money(pend);
+    const sit = document.getElementById('os-situacao-pagamento');
+    if(pago >= total && total > 0) sit.value='Pago';
+    else if(pago > 0) sit.value='Parcialmente pago';
+    else sit.value='Pendente';
+  }
+
+  ['os-orcamento','os-valor-final','os-desconto','os-pago'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',calcFinance);
+  });
+
+  document.getElementById('os-cpf').addEventListener('input',e=>e.target.value=formatCPF(e.target.value));
+
+  window.carregarOS = async function(){
+    const tbody = document.getElementById('os-table-body'), empty=document.getElementById('empty-state'), loading=document.getElementById('loading-state');
+    loading.style.display='flex'; empty.style.display='none'; tbody.innerHTML='';
+    try{
+      const snap = await getDocs(query(collection(db,'ordens'),orderBy('atualizadoEm','desc')));
+      ordensCache = snap.docs.map(d=>({idDoc:d.id,...d.data()}));
+      loading.style.display='none';
+      if(!ordensCache.length){ empty.style.display='flex'; return; }
+      ordensCache.forEach(os=>{
+        const foto = os.fotos ? Object.values(os.fotos).find(x=>x?.url) : null;
+        const color = statusColors[os.status] || 'bg-slate-100 text-slate-600';
+        const tr=document.createElement('tr'); tr.className='hover:bg-slate-50 transition';
+        tr.innerHTML=`
+          <td class="p-4">${foto ? `<img src="${esc(foto.url)}" class="w-10 h-10 object-cover rounded-lg border cursor-pointer" onclick="window.open('${esc(foto.url)}','_blank')">` : `<div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center"><i data-lucide="image-off" class="w-4 h-4 text-slate-400"></i></div>`}</td>
+          <td class="p-4"><p class="font-bold text-slate-900">${esc(os.nome)}</p><p class="text-xs text-slate-500">${esc(os.telefone)}${os.cpf?' • CPF '+esc(os.cpf):''}</p></td>
+          <td class="p-4"><p class="font-medium">${esc(os.aparelho)}</p><p class="text-xs text-slate-500 truncate max-w-[220px]">${esc(os.defeito)}</p></td>
+          <td class="p-4"><p class="font-semibold">${money(os.totalPagar)}</p><p class="text-xs ${os.valorPendente>0?'text-red-500':'text-emerald-600'}">Pendente: ${money(os.valorPendente)}</p></td>
+          <td class="p-4"><span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${color}">${esc(os.status)}</span></td>
+          <td class="p-4 text-right whitespace-nowrap">
+            <button onclick="sendWhatsApp('${esc(os.telefone)}','${esc(os.nome)}','${esc(os.aparelho)}','${esc(os.status)}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg" title="WhatsApp"><i data-lucide="message-circle" class="w-5 h-5"></i></button>
+            <button onclick="prepararEdicao('${os.idDoc}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Editar"><i data-lucide="edit" class="w-5 h-5"></i></button>
+            <button onclick="abrirDocumentoPorId('${os.idDoc}')" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg" title="Documento"><i data-lucide="file-signature" class="w-5 h-5"></i></button>
+            <button onclick="excluirOS('${os.idDoc}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg" title="Excluir"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+      icons();
+    }catch(e){
+      console.error(e); loading.innerHTML='<p class="text-red-500 text-xs p-6">Erro ao carregar. Verifique a conexão e as Security Rules do Firestore.</p>';
+    }
+  };
+
+  function getFormData(){
+    const final = num('os-valor-final'), desconto=num('os-desconto'), total=Math.max(0,final-desconto), pago=num('os-pago');
+    return {
+      nome: document.getElementById('os-nome').value.trim(),
+      telefone: document.getElementById('os-telefone').value.trim(),
+      cpf: document.getElementById('os-cpf').value.trim(),
+      marca: document.getElementById('os-marca').value.trim(),
+      aparelho: document.getElementById('os-aparelho').value.trim(),
+      imei: document.getElementById('os-imei').value.trim(),
+      serial: document.getElementById('os-serial').value.trim(),
+      defeito: document.getElementById('os-defeito').value.trim(),
+      estadoFisico: document.getElementById('os-estado').value.trim(),
+      acessorios: document.getElementById('os-acessorios').value.trim(),
+      status: document.getElementById('os-status').value,
+      valorOrcamento: num('os-orcamento'),
+      valorFinal: final,
+      desconto,
+      totalPagar: total,
+      valorPago: pago,
+      valorPendente: Math.max(0,total-pago),
+      formaPagamento: document.getElementById('os-pagamento').value,
+      situacaoPagamento: document.getElementById('os-situacao-pagamento').value,
+      fotos: Object.fromEntries(photoTypes.map(([key])=>[key,{url:photoState[key]?.url||'',path:photoState[key]?.path||''}]).filter(([k,v])=>v.url)),
+      atualizadoEm: new Date().toISOString()
     };
+  }
 
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+  async function uploadPhotos(idDoc, oldFotos={}){
+    const fotos={...oldFotos};
+    for(const [key] of photoTypes){
+      const st=photoState[key];
+      if(!st) continue;
+      if(st.remove && st.path){
+        try{ await deleteObject(ref(storage,st.path)); }catch(e){ console.warn('Falha ao remover foto',e); }
+        delete fotos[key];
+      }
+      if(st.file){
+        const file=st.file;
+        const safe=file.name.replace(/[^\w.\-]+/g,'_');
+        const path=`ordens/${idDoc}/fotos/${key}_${Date.now()}_${safe}`;
+        const snap=await uploadBytes(ref(storage,path),file);
+        fotos[key]={url:await getDownloadURL(snap.ref),path};
+      }
+    }
+    return fotos;
+  }
 
-    const statusColors = {
-      'Recebido': 'bg-slate-100 text-slate-600',
-      'Em Orçamento': 'bg-amber-100 text-amber-700',
-      'Aguardando Aprovação': 'bg-orange-100 text-orange-700',
-      'Aguardando Peça': 'bg-red-100 text-red-700',
-      'Em Reparo': 'bg-blue-100 text-blue-700',
-      'Pronto': 'bg-emerald-100 text-emerald-700',
-      'Entregue': 'bg-purple-100 text-purple-700',
+  window.saveOS = async function(event){
+    event.preventDefault();
+    const btn=document.getElementById('btn-salvar'); btn.disabled=true; btn.textContent='Salvando...';
+    try{
+      let id=document.getElementById('os-id').value;
+      const existing=id ? ordensCache.find(o=>o.idDoc===id) : null;
+      const data=getFormData();
+      if(!id){
+        const refDoc=await addDoc(collection(db,'ordens'),{...data,usuarioId:auth.currentUser.uid,criadoEm:new Date().toISOString()});
+        id=refDoc.id;
+      }else{
+        const fotos=await uploadPhotos(id,existing?.fotos||{});
+        await updateDoc(doc(db,'ordens',id),{...data,fotos,usuarioId:existing?.usuarioId||auth.currentUser.uid});
+      }
+      if(!existing){
+        const fotos=await uploadPhotos(id,{});
+        await updateDoc(doc(db,'ordens',id),{fotos});
+      }
+      currentOS={idDoc:id,...getFormData(),...(ordensCache.find(o=>o.idDoc===id)||{})};
+      closeModal(); await carregarOS();
+      alert('OS salva com sucesso.');
+    }catch(e){ console.error(e); alert('Erro ao salvar a OS. Verifique o console e as regras do Firebase.'); }
+    finally{ btn.disabled=false; btn.textContent='Salvar OS'; }
+  };
+
+  window.prepararEdicao = async function(id){
+    const os=ordensCache.find(o=>o.idDoc===id); if(!os)return;
+    document.getElementById('os-id').value=id;
+    document.getElementById('os-nome').value=os.nome||''; document.getElementById('os-telefone').value=os.telefone||'';
+    document.getElementById('os-cpf').value=os.cpf||''; document.getElementById('os-marca').value=os.marca||'';
+    document.getElementById('os-aparelho').value=os.aparelho||''; document.getElementById('os-imei').value=os.imei||'';
+    document.getElementById('os-serial').value=os.serial||''; document.getElementById('os-defeito').value=os.defeito||'';
+    document.getElementById('os-estado').value=os.estadoFisico||''; document.getElementById('os-acessorios').value=os.acessorios||'';
+    document.getElementById('os-status').value=os.status||'Recebido'; document.getElementById('os-orcamento').value=os.valorOrcamento||0;
+    document.getElementById('os-valor-final').value=os.valorFinal||0; document.getElementById('os-desconto').value=os.desconto||0;
+    document.getElementById('os-pago').value=os.valorPago||0; document.getElementById('os-pagamento').value=os.formaPagamento||'';
+    document.getElementById('os-situacao-pagamento').value=os.situacaoPagamento||'Pendente';
+    document.getElementById('modal-title').textContent='Editar Ordem de Serviço'; document.getElementById('modal-os-id').textContent='ID: '+id;
+    document.getElementById('document-section').classList.remove('hidden'); document.getElementById('btn-doc-nova').classList.add('hidden');
+    currentOS={...os}; resetPhotoState(os); calcFinance();
+    await carregarAssinaturasNaOS(os);
+    document.getElementById('os-modal').style.display='flex'; icons();
+  };
+
+  async function carregarAssinaturasNaOS(os){
+    signatures.cliente=os.assinaturas?.cliente||''; signatures.assistencia=os.assinaturas?.assistencia||'';
+    signatureDirty.cliente=false; signatureDirty.assistencia=false;
+    initSignatureCanvas('cliente'); initSignatureCanvas('assistencia');
+    setTimeout(()=>{
+      if(signatures.cliente) drawImageToCanvas('cliente',signatures.cliente);
+      if(signatures.assistencia) drawImageToCanvas('assistencia',signatures.assistencia);
+      document.getElementById('cliente-sign-status').textContent=signatures.cliente?'Assinatura salva na OS.':'Ainda não assinada.';
+      document.getElementById('assistencia-sign-status').textContent=signatures.assistencia?'Assinatura salva na OS.':'Ainda não assinada.';
+    },50);
+  }
+
+  function initSignatureCanvas(type){
+    const c=document.getElementById('signature-'+type); if(!c)return;
+    const rect=c.getBoundingClientRect(), ratio=window.devicePixelRatio||1;
+    c.width=rect.width*ratio; c.height=rect.height*ratio;
+    const ctx=c.getContext('2d'); ctx.scale(ratio,ratio); ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#111827';
+    let drawing=false;
+    const pos=e=>{const r=c.getBoundingClientRect(); const p=e.touches?.[0]||e; return {x:p.clientX-r.left,y:p.clientY-r.top};};
+    const start=e=>{e.preventDefault(); drawing=true; const p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);signatureDirty[type]=true;};
+    const move=e=>{if(!drawing)return;e.preventDefault();const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();};
+    const end=()=>{drawing=false;};
+    c.onpointerdown=start;c.onpointermove=move;c.onpointerup=end;c.onpointerleave=end;
+  }
+
+  function drawImageToCanvas(type,data){
+    const c=document.getElementById('signature-'+type),ctx=c.getContext('2d'),img=new Image();
+    img.onload=()=>{const r=Math.min(c.width/img.width,c.height/img.height);ctx.drawImage(img,(c.width-img.width*r)/2,(c.height-img.height*r)/2,img.width*r,img.height*r);};
+    img.src=data;
+  }
+
+  window.clearSignature=function(type){
+    const c=document.getElementById('signature-'+type),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+    signatures[type]='';signatureDirty[type]=true;document.getElementById(type+'-sign-status').textContent='Assinatura removida (salve a OS).';
+  };
+
+  window.salvarAssinatura=async function(type){
+    const id=document.getElementById('os-id').value;
+    if(!id){ alert('Salve a OS primeiro para vincular a assinatura.'); return; }
+    const c=document.getElementById('signature-'+type);
+    const data=c.toDataURL('image/png');
+    if(!signatureDirty[type] && signatures[type]) return alert('Esta assinatura já está salva.');
+    signatures[type]=data;
+    const os=ordensCache.find(o=>o.idDoc===id)||currentOS||{};
+    const assinaturas={...(os.assinaturas||{}),[type]:data};
+    await updateDoc(doc(db,'ordens',id),{assinaturas,atualizadoEm:new Date().toISOString()});
+    const idx=ordensCache.findIndex(o=>o.idDoc===id); if(idx>=0)ordensCache[idx].assinaturas=assinaturas;
+    signatureDirty[type]=false;
+    document.getElementById(type+'-sign-status').textContent='Assinatura salva na OS.';
+    alert('Assinatura salva.');
+  };
+
+  window.openModal=function(){
+    document.getElementById('os-form').reset();document.getElementById('os-id').value='';
+    document.getElementById('modal-title').textContent='Nova Ordem de Serviço';document.getElementById('modal-os-id').textContent='';
+    document.getElementById('document-section').classList.add('hidden');document.getElementById('btn-doc-nova').classList.remove('hidden');
+    signatures.cliente='';signatures.assistencia='';resetPhotoState({});calcFinance();currentOS=null;
+    document.getElementById('os-modal').style.display='flex';icons();
+  };
+
+  window.abrirDocumentoNovaOS=function(){ alert('Primeiro salve a OS. Depois você poderá gerar o documento e colher as assinaturas.'); };
+  window.closeModal=function(){document.getElementById('os-modal').style.display='none';};
+  window.excluirOS=async function(id){
+    if(!confirm('Deseja realmente excluir esta OS e seus registros?'))return;
+    try{await deleteDoc(doc(db,'ordens',id));await carregarOS();}catch(e){console.error(e);alert('Erro ao excluir.');}
+  };
+
+  window.sendWhatsApp=function(telefone,nome,aparelho,status){
+    let numero=String(telefone).replace(/\D/g,'');if(!numero.startsWith('55'))numero='55'+numero;
+    let mensagem=`Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\nAtualização sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
+    if(status==='Pronto')mensagem+='Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n';
+    else if(status==='Aguardando Aprovação')mensagem+='O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n';
+    else if(status==='Aguardando Peça')mensagem+='Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n';
+    mensagem+='Qualquer dúvida, estamos à disposição!';
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`,'_blank');
+  };
+
+  function osById(id){return ordensCache.find(o=>o.idDoc===id)||null;}
+  window.abrirDocumentoPorId=function(id){
+    const os=osById(id);if(!os)return;
+    currentOS=os;document.getElementById('document-preview-content').innerHTML=buildDocumentHTML(os);
+    document.getElementById('document-modal').style.display='flex';icons();
+  };
+  window.openDocumentPreview=function(){
+    const id=document.getElementById('os-id').value;const os=osById(id)||currentOS;
+    if(!os){alert('Salve a OS primeiro.');return;}
+    document.getElementById('document-preview-content').innerHTML=buildDocumentHTML(os);
+    document.getElementById('document-modal').style.display='flex';icons();
+  };
+  window.closeDocumentPreview=function(){document.getElementById('document-modal').style.display='none';};
+
+  function documentData(os){
+    return {
+      ...os,
+      termosVersao: os.termosSnapshot || termosAtuais,
+      data: os.criadoEm ? new Date(os.criadoEm).toLocaleString('pt-BR') : new Date().toLocaleString('pt-BR'),
+      fotos: os.fotos || {}
     };
+  }
 
-    let ordensCache = [];
+  function buildDocumentHTML(os){
+    const d=documentData(os);
+    const fotos=Object.entries(d.fotos).filter(([,v])=>v?.url);
+    const terms=nl2br(d.termosVersao);
+    return `<div class="bg-white max-w-[794px] mx-auto shadow-sm p-10 text-slate-900 text-sm leading-6">
+      <div class="border-b-2 border-slate-900 pb-4 mb-5 flex justify-between gap-4">
+        <div><h1 class="text-2xl font-bold">MACKSON TECHNOLOGY</h1><p class="text-xs text-slate-500">ORDEM DE SERVIÇO — DOCUMENTO DE ENTRADA E AUTORIZAÇÃO</p></div>
+        <div class="text-right"><p class="font-bold">OS #${esc(os.idDoc)}</p><p class="text-xs">${esc(d.data)}</p></div>
+      </div>
+      <h2 class="font-bold uppercase border-b pb-1 mb-2">1. Cliente</h2>
+      <p><b>Nome:</b> ${esc(d.nome)} &nbsp;&nbsp; <b>WhatsApp:</b> ${esc(d.telefone)} ${d.cpf?`&nbsp;&nbsp; <b>CPF:</b> ${esc(d.cpf)}`:''}</p>
+      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">2. Aparelho</h2>
+      <p><b>Marca:</b> ${esc(d.marca||'Não informado')} &nbsp;&nbsp; <b>Modelo:</b> ${esc(d.aparelho)}</p>
+      <p><b>IMEI:</b> ${esc(d.imei||'Não informado')} &nbsp;&nbsp; <b>Nº de série:</b> ${esc(d.serial||'Não informado')}</p>
+      <p><b>Defeito / relato:</b> ${nl2br(d.defeito)}</p>
+      <p><b>Estado físico:</b> ${nl2br(d.estadoFisico||'Não informado')}</p>
+      <p><b>Acessórios:</b> ${nl2br(d.acessorios||'Não informado')}</p>
+      ${fotos.length?`<h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">3. Registro fotográfico</h2><div class="grid grid-cols-3 gap-3">${fotos.map(([k,v])=>`<div><img src="${esc(v.url)}" class="w-full h-36 object-cover rounded border"><p class="text-[10px] text-center mt-1">${esc(photoTypes.find(x=>x[0]===k)?.[1]||k)}</p></div>`).join('')}</div>`:''}
+      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">4. Termos e condições</h2>
+      <div class="whitespace-normal">${terms}</div>
+      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">5. Informações do serviço</h2>
+      <p><b>Status:</b> ${esc(d.status)} &nbsp;&nbsp; <b>Valor final:</b> ${money(d.valorFinal)} &nbsp;&nbsp; <b>Desconto:</b> ${money(d.desconto)}</p>
+      <p><b>Total:</b> ${money(d.totalPagar)} &nbsp;&nbsp; <b>Pago:</b> ${money(d.valorPago)} &nbsp;&nbsp; <b>Pendente:</b> ${money(d.valorPendente)}</p>
+      <p><b>Forma de pagamento:</b> ${esc(d.formaPagamento||'Não informado')} &nbsp;&nbsp; <b>Situação:</b> ${esc(d.situacaoPagamento||'Pendente')}</p>
+      <p class="mt-4 text-xs text-slate-500">Este documento registra as informações e o aceite relacionados à presente Ordem de Serviço, observada a legislação aplicável.</p>
+      <div class="grid grid-cols-2 gap-12 mt-14">
+        <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.cliente?`<img src="${esc(d.assinaturas.cliente)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura do cliente</div></div>
+        <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.assistencia?`<img src="${esc(d.assinaturas.assistencia)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura da assistência</div></div>
+      </div>
+    </div>`;
+  }
 
-    window.carregarOS = async function() {
-      const tbody = document.getElementById('os-table-body');
-      const emptyState = document.getElementById('empty-state');
-      const loadingState = document.getElementById('loading-state');
-      
-      loadingState.style.display = 'flex';
-      tbody.innerHTML = '';
+  window.printOS=function(){
+    const os=currentOS||osById(document.getElementById('os-id').value);
+    if(!os){alert('Salve a OS primeiro.');return;}
+    document.getElementById('print-document').innerHTML=buildDocumentHTML(os);
+    document.getElementById('print-document').classList.remove('hidden');
+    setTimeout(()=>{window.print();setTimeout(()=>document.getElementById('print-document').classList.add('hidden'),500);},100);
+  };
 
-      try {
-        const querySnapshot = await getDocs(collection(db, "ordens"));
-        ordensCache = [];
-        querySnapshot.forEach((docSnap) => {
-          ordensCache.push({ idDoc: docSnap.id, ...docSnap.data() });
-        });
+  async function snapshotTermsForOS(id){
+    const texto=document.getElementById('termos-editor')?.value?.trim() || termosAtuais || DEFAULT_TERMS;
+    try{
+      await updateDoc(doc(db,'ordens',id),{termosSnapshot:texto});
+      return texto;
+    }catch(e){console.warn('Não foi possível registrar snapshot dos termos',e);return texto;}
+  }
 
-        loadingState.style.display = 'none';
+  window.downloadDOCX=async function(){
+    const os=currentOS||osById(document.getElementById('os-id').value);
+    if(!os){alert('Salve a OS primeiro.');return;}
+    try{
+      const D=window.docx;
+      if(!D){alert('Biblioteca DOCX não carregou. Verifique sua conexão.');return;}
+      const d=documentData(os);
+      const children=[];
+      children.push(new D.Paragraph({text:'MACKSON TECHNOLOGY',heading:D.HeadingLevel.TITLE}));
+      children.push(new D.Paragraph({text:`ORDEM DE SERVIÇO — OS #${os.idDoc}`}));
+      children.push(new D.Paragraph({text:`Data: ${d.data}`}));
+      children.push(new D.Paragraph({text:'1. CLIENTE',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:`Nome: ${d.nome} | WhatsApp: ${d.telefone}${d.cpf?' | CPF: '+d.cpf:''}`}));
+      children.push(new D.Paragraph({text:'2. APARELHO',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:`Marca: ${d.marca||'Não informado'} | Modelo: ${d.aparelho}`}));
+      children.push(new D.Paragraph({text:`IMEI: ${d.imei||'Não informado'} | Nº de série: ${d.serial||'Não informado'}`}));
+      children.push(new D.Paragraph({text:`Defeito / relato: ${d.defeito}`}));
+      children.push(new D.Paragraph({text:`Estado físico: ${d.estadoFisico||'Não informado'}`}));
+      children.push(new D.Paragraph({text:`Acessórios: ${d.acessorios||'Não informado'}`}));
+      children.push(new D.Paragraph({text:'3. TERMOS E CONDIÇÕES',heading:D.HeadingLevel.HEADING_1}));
+      d.termosVersao.split(/\n+/).forEach(t=>{if(t.trim())children.push(new D.Paragraph({text:t.trim()}));});
+      children.push(new D.Paragraph({text:'4. INFORMAÇÕES DO SERVIÇO',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:`Status: ${d.status}`}));
+      children.push(new D.Paragraph({text:`Valor final: ${money(d.valorFinal)} | Desconto: ${money(d.desconto)} | Total: ${money(d.totalPagar)}`}));
+      children.push(new D.Paragraph({text:`Pago: ${money(d.valorPago)} | Pendente: ${money(d.valorPendente)} | Forma: ${d.formaPagamento||'Não informado'}`}));
+      children.push(new D.Paragraph({text:'5. ASSINATURAS',heading:D.HeadingLevel.HEADING_1}));
+      children.push(new D.Paragraph({text:'____________________________________________\nAssinatura do cliente'}));
+      children.push(new D.Paragraph({text:'____________________________________________\nAssinatura da assistência'}));
+      const docxFile=new D.Document({sections:[{properties:{},children}]});
+      const blob=await D.Packer.toBlob(docxFile);
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`OS-${os.idDoc}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    }catch(e){console.error(e);alert('Erro ao gerar DOCX.');}
+  };
 
-        if (ordensCache.length === 0) {
-          emptyState.style.display = 'flex';
-        } else {
-          emptyState.style.display = 'none';
-          ordensCache.forEach(os => {
-            const colorClass = statusColors[os.status] || 'bg-slate-100 text-slate-600';
-            const fotoHtml = os.fotoUrl 
-              ? `<img src="${os.fotoUrl}" class="w-10 h-10 object-cover rounded-lg border border-slate-200 cursor-pointer" onclick="window.open('${os.fotoUrl}', '_blank')">`
-              : `<div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-xs"><i data-lucide="image-off" class="w-4 h-4"></i></div>`;
+  document.getElementById('login-form').addEventListener('submit',async e=>{
+    e.preventDefault();const btn=document.getElementById('btn-login'),err=document.getElementById('login-error');
+    btn.disabled=true;btn.textContent='Entrando...';err.classList.add('hidden');
+    try{await signInWithEmailAndPassword(auth,document.getElementById('login-email').value.trim(),document.getElementById('login-password').value);}
+    catch(e){console.error(e);err.textContent='Não foi possível entrar. Confira e-mail e senha.';err.classList.remove('hidden');}
+    finally{btn.disabled=false;btn.textContent='Entrar';}
+  });
 
-            const tr = document.createElement('tr');
-            tr.className = 'hover:bg-slate-50 transition';
-            tr.innerHTML = `
-              <td class="p-4">${fotoHtml}</td>
-              <td class="p-4">
-                <p class="font-bold text-slate-900">${os.nome}</p>
-                <p class="text-xs text-slate-500">${os.telefone}</p>
-              </td>
-              <td class="p-4">
-                <p class="font-medium text-slate-800">${os.aparelho}</p>
-                <p class="text-xs text-slate-500 truncate max-w-[200px]">${os.defeito}</p>
-              </td>
-              <td class="p-4">
-                <span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${colorClass}">
-                  ${os.status}
-                </span>
-              </td>
-              <td class="p-4 text-right space-x-1">
-                <button onclick="sendWhatsApp('${os.telefone}', '${os.nome}', '${os.aparelho}', '${os.status}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition" title="Enviar WhatsApp">
-                  <i data-lucide="message-circle" class="w-5 h-5"></i>
-                </button>
-                <button onclick="prepararEdicao('${os.idDoc}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Editar">
-                  <i data-lucide="edit" class="w-5 h-5"></i>
-                </button>
-                <button onclick="excluirOS('${os.idDoc}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition" title="Excluir">
-                  <i data-lucide="trash-2" class="w-5 h-5"></i>
-                </button>
-              </td>
-            `;
-            tbody.appendChild(tr);
-          });
-        }
-        lucide.createIcons();
-      } catch (error) {
-        console.error("Erro ao carregar do Firebase:", error);
-        loadingState.innerHTML = `<p class="text-red-500 text-xs">Erro ao carregar dados. Verifique sua conexão ou regras do Firestore.</p>`;
-      }
+  document.getElementById('btn-reset-password').addEventListener('click',async()=>{
+    const email=document.getElementById('login-email').value.trim();
+    if(!email)return alert('Digite seu e-mail primeiro.');
+    try{await sendPasswordResetEmail(auth,email);alert('Se o e-mail estiver cadastrado, você receberá as instruções para redefinir a senha.');}
+    catch(e){console.error(e);alert('Não foi possível enviar o e-mail de recuperação.');}
+  });
+
+  window.logout=async function(){await signOut(auth);};
+
+  onAuthStateChanged(auth,async user=>{
+    const login=document.getElementById('login-screen'),appEl=document.getElementById('app-screen');
+    if(user){
+      login.classList.add('hidden');appEl.classList.remove('hidden');document.getElementById('user-email').textContent=user.email||'Usuário autenticado';
+      await carregarTermos();await carregarOS();icons();
+    }else{
+      appEl.classList.add('hidden');login.classList.remove('hidden');
     }
+  });
 
-    window.saveOS = async function(event) {
-      event.preventDefault();
-      const btnSalvar = document.getElementById('btn-salvar');
-      btnSalvar.innerText = "Salvando na nuvem...";
-      btnSalvar.disabled = true;
-
-      const idDoc = document.getElementById('os-id').value;
-      const fileInput = document.getElementById('os-foto');
-      
-      let fotoUrl = "";
-      if (idDoc) {
-        const osAntiga = ordensCache.find(o => o.idDoc === idDoc);
-        if (osAntiga) fotoUrl = osAntiga.fotoUrl || "";
-      }
-
-      // Se enviou foto nova, faz upload pro Firebase Storage
-      if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const storageRef = ref(storage, `os_fotos/${Date.now()}_${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        fotoUrl = await getDownloadURL(snapshot.ref);
-      }
-
-      const osData = {
-        nome: document.getElementById('os-nome').value,
-        telefone: document.getElementById('os-telefone').value,
-        aparelho: document.getElementById('os-aparelho').value,
-        defeito: document.getElementById('os-defeito').value,
-        status: document.getElementById('os-status').value,
-        fotoUrl: fotoUrl,
-        atualizadoEm: new Date().toISOString()
-      };
-
-      try {
-        if (idDoc) {
-          await updateDoc(doc(db, "ordens", idDoc), osData);
-        } else {
-          await addDoc(collection(db, "ordens"), osData);
-        }
-        closeModal();
-        carregarOS();
-      } catch (error) {
-        console.error("Erro ao salvar:", error);
-        alert("Erro ao salvar no Firebase. Veja o console.");
-      } finally {
-        btnSalvar.innerText = "Salvar OS";
-        btnSalvar.disabled = false;
-      }
-    }
-
-    window.excluirOS = async function(idDoc) {
-      if (confirm('Deseja realmente excluir esta OS da nuvem?')) {
-        try {
-          await deleteDoc(doc(db, "ordens", idDoc));
-          carregarOS();
-        } catch (error) {
-          console.error("Erro ao excluir:", error);
-        }
-      }
-    }
-
-    window.prepararEdicao = function(idDoc) {
-      const os = ordensCache.find(o => o.idDoc === idDoc);
-      if (!os) return;
-
-      document.getElementById('os-id').value = os.idDoc;
-      document.getElementById('os-nome').value = os.nome;
-      document.getElementById('os-telefone').value = os.telefone;
-      document.getElementById('os-aparelho').value = os.aparelho;
-      document.getElementById('os-defeito').value = os.defeito;
-      document.getElementById('os-status').value = os.status;
-      document.getElementById('os-foto').value = '';
-
-      document.getElementById('modal-title').innerText = 'Editar Ordem de Serviço';
-      document.getElementById('os-modal').style.display = 'flex';
-    }
-
-    window.sendWhatsApp = function(telefone, nome, aparelho, status) {
-      let numero = telefone.replace(/\D/g, '');
-      if (!numero.startsWith('55')) numero = '55' + numero;
-
-      let mensagem = `Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\n`;
-      mensagem += `Atualização sobre o seu aparelho (*${aparelho}*).\n`;
-      mensagem += `*Status Atual:* ${status}\n\n`;
-
-      if (status === 'Pronto') {
-        mensagem += `Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n`;
-      } else if (status === 'Aguardando Aprovação') {
-        mensagem += `O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n`;
-      } else if (status === 'Aguardando Peça') {
-        mensagem += `Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n`;
-      }
-
-      mensagem += `Qualquer dúvida, estamos à disposição!`;
-
-      window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
-    }
-
-    window.openModal = function() {
-      document.getElementById('os-form').reset();
-      document.getElementById('os-id').value = '';
-      document.getElementById('modal-title').innerText = 'Nova Ordem de Serviço';
-      document.getElementById('os-modal').style.display = 'flex';
-    }
-
-    window.closeModal = function() {
-      document.getElementById('os-modal').style.display = 'none';
-    }
-
-    // Carregar na inicialização
-    carregarOS();
-    lucide.createIcons();
-  </script>
+  icons();
+</script>
 </body>
 </html>
