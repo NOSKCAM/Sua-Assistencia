@@ -1,280 +1,205 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sua Assistência Pro</title>
-    <!-- Fonte Inter para visual moderno -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --bg-input: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --accent: #10b981;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #475569;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestão — Ordem de Serviço</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#165EF0',
+            'brand-dark': '#1148BD',
+          }
         }
-
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; }
-        
-        .header { background: var(--bg-card); padding: 20px; text-align: center; border-bottom: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
-        .header p { margin: 5px 0 0; font-size: 0.85rem; color: var(--text-muted); }
-
-        .container { max-width: 600px; margin: 20px auto; padding: 0 15px 40px; }
-
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
-        .card h2 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-
-        .form-group { margin-bottom: 16px; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-
-        .btn { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 8px; color: #fff; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.2s, transform 0.1s; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn:active { transform: scale(0.98); }
-        .btn-secondary { background: #64748b; margin-top: 8px; }
-        .btn-success { background: var(--accent); }
-
-        .canvas-container { background: #ffffff; border-radius: 8px; overflow: hidden; margin-top: 6px; }
-        canvas { width: 100%; height: 140px; touch-action: none; display: block; }
-
-        .os-item { background: var(--bg-card); border: 1px solid var(--border); border-left: 5px solid var(--primary); border-radius: 10px; padding: 16px; margin-bottom: 15px; }
-        .os-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .os-title { font-weight: 700; font-size: 1.1rem; }
-        .badge { background: rgba(59, 130, 246, 0.2); color: var(--primary); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
-        .os-info { font-size: 0.9rem; color: var(--text-muted); margin: 4px 0; }
-        .os-info strong { color: var(--text-main); }
-
-        @media print {
-            body * { visibility: hidden; }
-            #printArea, #printArea * { visibility: visible; color: #000; }
-            #printArea { position: absolute; left: 0; top: 0; width: 100%; background: #fff; padding: 20px; }
-        }
-    </style>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDOzWAT4oWzJuqSO0Qi_ToCUgbWxIpxLZ4",
-            authDomain: "sua-assistencia.firebaseapp.com",
-            projectId: "sua-assistencia",
-            storageBucket: "sua-assistencia.firebasestorage.app",
-            messagingSenderId: "780070354483",
-            appId: "1:780070354483:web:b761d6faef14120bed0d46"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        window.db = db;
-        window.storage = storage;
-        window.fbUtils = { collection, addDoc, getDocs, ref, uploadBytes, getDownloadURL };
-    </script>
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
 
-<div class="header">
-    <h1>SUA ASSISTÊNCIA PRO</h1>
-    <p>Gestão Inteligente de Ordens de Serviço</p>
-</div>
+  <div class="flex min-h-screen">
+    
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col fixed h-full z-40">
+      
+      <!-- Logo/Header -->
+      <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
+        <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
+          OS
+        </div>
+        <div>
+          <span class="font-bold text-slate-900 text-lg leading-none block">TechFix OS</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded mt-1 inline-block">Plano Pro</span>
+        </div>
+      </div>
 
-<div class="container">
-    <div class="card">
-        <h2>Nova Ordem de Serviço</h2>
-        <form id="osForm">
-            <div class="form-group">
-                <label>NOME DO CLIENTE</label>
-                <input type="text" id="cliente" placeholder="Ex: João Silva" required>
+      <!-- Navegação -->
+      <nav class="flex-1 overflow-y-auto p-4 space-y-6">
+        
+        <!-- Grupo 1 -->
+        <div>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Gestão Operacional</p>
+          <div class="space-y-1">
+            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm">
+              <div class="flex items-center gap-3">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span>Dashboard</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </a>
+
+            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+              <div class="flex items-center gap-3">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+                <span>Ordens de Serviço</span>
+              </div>
+              <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded border border-slate-200">12</span>
+            </a>
+
+            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+              <div class="flex items-center gap-3">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+                <span>Bancada / Fluxo</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Grupo 2 -->
+        <div>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-2">Clientes & Vendas</p>
+          <div class="space-y-1">
+            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+              <div class="flex items-center gap-3">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span>Clientes</span>
+              </div>
+            </a>
+
+            <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+              <div class="flex items-center gap-3">
+                <i data-lucide="package" class="w-5 h-5"></i>
+                <span>Estoque / Peças</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+      </nav>
+
+      <!-- Rodapé da Sidebar / Perfil -->
+      <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-sm">
+            A
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-800 truncate">Assistência Técnica</p>
+            <p class="text-[10px] text-slate-400 truncate">contato@empresa.com</p>
+          </div>
+          <button class="text-slate-400 hover:text-red-500 p-1">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 ml-72 p-8">
+      
+      <!-- Header / Título -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900">Visão Geral</h1>
+          <p class="text-sm text-slate-500">Acompanhe o desempenho da sua assistência técnica em tempo real.</p>
+        </div>
+        
+        <button class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
+          <i data-lucide="plus" class="w-5 h-5"></i>
+          <span>Nova OS</span>
+        </button>
+      </div>
+
+      <!-- Banner de Alerta / Comunidade -->
+      <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-4 text-white flex items-center justify-between shadow-md mb-8">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
+            <i data-lucide="message-circle" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm">Grupo VIP de Suporte & Novidades</h3>
+            <p class="text-xs text-emerald-100">Receba dicas de gestão e atualizações diretas no WhatsApp.</p>
+          </div>
+        </div>
+        <button class="bg-white text-emerald-800 font-bold text-xs px-4 py-2 rounded-lg hover:bg-emerald-50 transition">
+          Entrar Agora
+        </button>
+      </div>
+
+      <!-- Grid de Métricas / Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-semibold text-slate-400 uppercase">OS Abertas</span>
+            <div class="p-2 bg-blue-50 text-brand rounded-lg">
+              <i data-lucide="wrench" class="w-5 h-5"></i>
             </div>
-            <div class="form-group">
-                <label>EQUIPAMENTO / MODELO</label>
-                <input type="text" id="equipamento" placeholder="Ex: iPhone 11 64GB" required>
+          </div>
+          <p class="text-2xl font-bold text-slate-900">18</p>
+          <span class="text-xs text-emerald-600 font-medium">+3 hoje</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-semibold text-slate-400 uppercase">Aguardando Peça</span>
+            <div class="p-2 bg-amber-50 text-amber-600 rounded-lg">
+              <i data-lucide="clock" class="w-5 h-5"></i>
             </div>
-            <div class="form-group">
-                <label>DEFEITO RELATADO</label>
-                <textarea id="defeito" rows="3" placeholder="Ex: Tela quebrada e não carrega" required></textarea>
+          </div>
+          <p class="text-2xl font-bold text-slate-900">5</p>
+          <span class="text-xs text-slate-400">Pendente com fornecedor</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-semibold text-slate-400 uppercase">Concluídas (Mês)</span>
+            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+              <i data-lucide="check-circle" class="w-5 h-5"></i>
             </div>
-            <div class="form-group">
-                <label>VALOR ORÇADO (R$)</label>
-                <input type="number" id="valor" step="0.01" placeholder="0.00">
+          </div>
+          <p class="text-2xl font-bold text-slate-900">42</p>
+          <span class="text-xs text-emerald-600 font-medium">+12% em relação ao mês anterior</span>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div class="flex justify-between items-start mb-2">
+            <span class="text-xs font-semibold text-slate-400 uppercase">Faturamento (Mês)</span>
+            <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+              <i data-lucide="dollar-sign" class="w-5 h-5"></i>
             </div>
-            <div class="form-group">
-                <label>FOTO DO APARELHO</label>
-                <input type="file" id="fotoInput" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label>ASSINATURA DIGITAL</label>
-                <div class="canvas-container">
-                    <canvas id="signaturePad"></canvas>
-                </div>
-                <button type="button" class="btn btn-secondary" onclick="limparAssinatura()">Limpar Assinatura</button>
-            </div>
-            <button type="submit" id="btnSalvar" class="btn">Salvar e Registrar OS</button>
-        </form>
-    </div>
+          </div>
+          <p class="text-2xl font-bold text-slate-900">R$ 8.450,00</p>
+          <span class="text-xs text-slate-400">Meta: R$ 10.000,00</span>
+        </div>
 
-    <div class="card">
-        <h2>Ordens de Serviço Recentes</h2>
-        <button class="btn btn-secondary" onclick="carregarOS()" style="margin-bottom: 15px;">Atualizar Lista</button>
-        <div id="listaOS">Carregando ordens de serviço...</div>
-    </div>
-</div>
+      </div>
 
-<div id="printArea" style="display:none;"></div>
+    </main>
+  </div>
 
-<script>
-    const canvas = document.getElementById('signaturePad');
-    const ctx = canvas.getContext('2d');
-    let desenhando = false;
-
-    function resizeCanvas() {
-        canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = 140;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    setTimeout(resizeCanvas, 500);
-
-    canvas.addEventListener('mousedown', () => desenhando = true);
-    canvas.addEventListener('mouseup', () => { desenhando = false; ctx.beginPath(); });
-    canvas.addEventListener('mousemove', desenhar);
-
-    canvas.addEventListener('touchstart', (e) => { desenhando = true; e.preventDefault(); });
-    canvas.addEventListener('touchend', () => { desenhando = false; ctx.beginPath(); });
-    canvas.addEventListener('touchmove', (e) => {
-        if(!desenhando) return;
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#000';
-        ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-        e.preventDefault();
-    });
-
-    function desenhar(e) {
-        if(!desenhando) return;
-        const rect = canvas.getBoundingClientRect();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#000';
-        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-    }
-
-    function limparAssinatura() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    document.getElementById('osForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnSalvar');
-        btn.disabled = true;
-        btn.innerText = "Processando...";
-
-        try {
-            let fotoUrl = "";
-            const fotoFile = document.getElementById('fotoInput').files[0];
-            if(fotoFile) {
-                const storageRef = window.fbUtils.ref(window.storage, 'fotos/' + Date.now() + '_' + fotoFile.name);
-                await window.fbUtils.uploadBytes(storageRef, fotoFile);
-                fotoUrl = await window.fbUtils.getDownloadURL(storageRef);
-            }
-
-            const novaOS = {
-                cliente: document.getElementById('cliente').value,
-                equipamento: document.getElementById('equipamento').value,
-                defeito: document.getElementById('defeito').value,
-                valor: document.getElementById('valor').value,
-                fotoUrl: fotoUrl,
-                assinatura: canvas.toDataURL(),
-                status: 'Ativo',
-                dataCriacao: new Date().toISOString()
-            };
-
-            await window.fbUtils.addDoc(window.fbUtils.collection(window.db, "ordens_servico"), novaOS);
-            alert("OS registrada com sucesso!");
-            document.getElementById('osForm').reset();
-            limparAssinatura();
-            carregarOS();
-        } catch (error) {
-            console.error(error);
-            alert("Erro ao salvar a OS.");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Salvar e Registrar OS";
-        }
-    });
-
-    async function carregarOS() {
-        const container = document.getElementById('listaOS');
-        container.innerHTML = "Buscando registros...";
-
-        try {
-            const querySnapshot = await window.fbUtils.getDocs(window.fbUtils.collection(window.db, "ordens_servico"));
-            container.innerHTML = "";
-            const agora = new Date();
-
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                const dataCriacao = new Date(data.dataCriacao);
-                const dias = (agora - dataCriacao) / (1000 * 60 * 60 * 24);
-
-                if(data.status === 'Concluido' && dias > 30) return;
-
-                const item = document.createElement('div');
-                item.className = 'os-item';
-                item.innerHTML = `
-                    <div class="os-header">
-                        <span class="os-title">${data.cliente}</span>
-                        <span class="badge">OS #${docSnap.id.substring(0,5).toUpperCase()}</span>
-                    </div>
-                    <div class="os-info"><strong>Aparelho:</strong> ${data.equipamento}</div>
-                    <div class="os-info"><strong>Defeito:</strong> ${data.defeito}</div>
-                    <div class="os-info"><strong>Valor:</strong> R$ ${data.valor || '0,00'}</div>
-                    <div class="os-info"><strong>Data:</strong> ${dataCriacao.toLocaleDateString('pt-BR')}</div>
-                    ${data.fotoUrl ? `<div class="os-info"><a href="${data.fotoUrl}" target="_blank" style="color:var(--primary)">Ver Foto Anexada</a></div>` : ''}
-                    <button class="btn btn-success" style="margin-top:10px;" onclick="imprimirOS('${data.cliente}', '${data.equipamento}', '${data.defeito}', '${data.valor}', '${data.assinatura}')">Imprimir Comprovante</button>
-                `;
-                container.appendChild(item);
-            });
-
-            if(container.innerHTML === "") container.innerHTML = "Nenhuma OS cadastrada.";
-        } catch (error) {
-            container.innerHTML = "Erro ao carregar lista.";
-        }
-    }
-
-    function imprimirOS(cliente, eq, def, val, ass) {
-        const printArea = document.getElementById('printArea');
-        printArea.innerHTML = `
-            <h2>Sua Assistência Pro - Comprovante</h2>
-            <hr>
-            <p><strong>Cliente:</strong> ${cliente}</p>
-            <p><strong>Equipamento:</strong> ${eq}</p>
-            <p><strong>Defeito Relatado:</strong> ${def}</p>
-            <p><strong>Valor:</strong> R$ ${val}</p>
-            <br>
-            <p><strong>Assinatura do Cliente:</strong></p>
-            <img src="${ass}" style="border-bottom:1px solid #000; max-width:250px;">
-        `;
-        window.print();
-    }
-
-    window.onload = () => setTimeout(carregarOS, 1000);
-</script>
+  <script>
+    // Inicializar os ícones do Lucide
+    lucide.createIcons();
+  </script>
 </body>
 </html>
