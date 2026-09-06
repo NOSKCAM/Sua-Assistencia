@@ -22,7 +22,8 @@
     @media print {
       body > *:not(#print-document) { display: none !important; }
       #print-document { display: block !important; }
-      @page { size: A4; margin: 12mm; }
+      /* Margem da folha reduzida para caber tudo em 1 página */
+      @page { size: A4; margin: 8mm; } 
     }
   </style>
 </head>
@@ -1046,34 +1047,37 @@ Este documento registra as condições da OS e não pretende afastar direitos as
     };
   }
 
+  // ATUALIZADO: HTML REDESENHADO PARA CABER EM 1 PÁGINA A4
   function buildDocumentHTML(os){
     const d = documentData(os);
     const fotos = Object.entries(d.fotos).filter(([,v])=>v?.url);
     const terms = nl2br(d.termosVersao);
-    return `<div class="bg-white max-w-[794px] mx-auto shadow-sm p-6 sm:p-10 text-slate-900 text-sm leading-6">
-      <div class="border-b-2 border-slate-900 pb-4 mb-5 flex flex-col sm:flex-row justify-between gap-4">
-        <div><h1 class="text-xl sm:text-2xl font-bold">MACKSON TECHNOLOGY</h1><p class="text-xs text-slate-500">ORDEM DE SERVIÇO — DOCUMENTO DE ENTRADA E AUTORIZAÇÃO</p></div>
-        <div class="sm:text-right"><p class="font-bold">OS #${esc(os.idDoc)}</p><p class="text-xs">${esc(d.data)}</p></div>
+    return `<div class="bg-white max-w-[794px] mx-auto shadow-sm p-4 sm:p-6 text-slate-900 text-xs sm:text-sm leading-snug">
+      <div class="border-b-2 border-slate-900 pb-2 mb-3 flex flex-col sm:flex-row justify-between gap-2">
+        <div><h1 class="text-lg sm:text-xl font-bold uppercase">MACKSON TECHNOLOGY</h1><p class="text-[10px] text-slate-500">ORDEM DE SERVIÇO E AUTORIZAÇÃO</p></div>
+        <div class="sm:text-right"><p class="font-bold text-sm">OS #${esc(os.idDoc)}</p><p class="text-[10px]">${esc(d.data)}</p></div>
       </div>
-      <h2 class="font-bold uppercase border-b pb-1 mb-2">1. Cliente</h2>
-      <p><b>Nome:</b> ${esc(d.nome)} <br class="sm:hidden"><b>WhatsApp:</b> ${esc(d.telefone)} ${d.cpf?`<br class="sm:hidden"><b>CPF:</b> ${esc(d.cpf)}`:''}</p>
-      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">2. Aparelho</h2>
-      <p><b>Marca:</b> ${esc(d.marca||'Não informado')} <br class="sm:hidden"><b>Modelo:</b> ${esc(d.aparelho)}</p>
-      <p><b>IMEI:</b> ${esc(d.imei||'Não informado')} <br class="sm:hidden"><b>Nº de série:</b> ${esc(d.serial||'Não informado')}</p>
-      <p><b>Defeito / relato:</b> ${nl2br(d.defeito)}</p>
-      <p><b>Estado físico:</b> ${nl2br(d.estadoFisico||'Não informado')}</p>
-      <p><b>Acessórios:</b> ${nl2br(d.acessorios||'Não informado')}</p>
-      ${fotos.length?`<h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">3. Registro fotográfico</h2><div class="grid grid-cols-2 sm:grid-cols-3 gap-3">${fotos.map(([k,v])=>`<div><img src="${esc(v.url)}" class="w-full h-36 object-cover rounded border"><p class="text-[10px] text-center mt-1">${esc(photoTypes.find(x=>x[0]===k)?.[1]||k)}</p></div>`).join('')}</div>`:''}
-      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">4. Termos e condições</h2>
-      <div class="whitespace-normal text-xs sm:text-sm">${terms}</div>
-      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">5. Informações do serviço</h2>
-      <p><b>Status:</b> ${esc(d.status)} <br class="sm:hidden"><b>Valor final:</b> ${money(d.valorFinal)} <br class="sm:hidden"><b>Desconto:</b> ${money(d.desconto)}</p>
-      <p><b>Total:</b> ${money(d.totalPagar)} <br class="sm:hidden"><b>Pago:</b> ${money(d.valorPago)} <br class="sm:hidden"><b>Pendente:</b> ${money(d.valorPendente)}</p>
-      <p><b>Forma de pagamento:</b> ${esc(d.formaPagamento||'Não informado')} <br class="sm:hidden"><b>Situação:</b> ${esc(d.situacaoPagamento||'Pendente')}</p>
-      <p class="mt-4 text-xs text-slate-500">Este documento registra as informações e o aceite relacionados à presente Ordem de Serviço, observada a legislação aplicável.</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mt-10 sm:mt-14">
-        <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.cliente?`<img src="${esc(d.assinaturas.cliente)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura do cliente</div></div>
-        <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.assistencia?`<img src="${esc(d.assinaturas.assistencia)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura da assistência</div></div>
+      
+      <h2 class="font-bold uppercase border-b pb-1 mb-1 text-[11px] sm:text-xs">1. Cliente</h2>
+      <p class="text-[11px] sm:text-xs"><b>Nome:</b> ${esc(d.nome)} &nbsp;&nbsp; <b>WhatsApp:</b> ${esc(d.telefone)} ${d.cpf?`&nbsp;&nbsp; <b>CPF:</b> ${esc(d.cpf)}`:''}</p>
+      
+      <h2 class="font-bold uppercase border-b pb-1 mt-3 mb-1 text-[11px] sm:text-xs">2. Aparelho</h2>
+      <p class="text-[11px] sm:text-xs"><b>Marca/Modelo:</b> ${esc(d.marca||'Não informado')} - ${esc(d.aparelho)} &nbsp;&nbsp; <b>IMEI/Série:</b> ${esc(d.imei||'Não informado')} / ${esc(d.serial||'Não informado')}</p>
+      <p class="text-[11px] sm:text-xs"><b>Defeito:</b> ${nl2br(d.defeito)}</p>
+      <p class="text-[11px] sm:text-xs"><b>Estado Físico:</b> ${nl2br(d.estadoFisico||'Não informado')} &nbsp;&nbsp; <b>Acessórios:</b> ${nl2br(d.acessorios||'Não informado')}</p>
+      
+      ${fotos.length?`<h2 class="font-bold uppercase border-b pb-1 mt-3 mb-1 text-[11px] sm:text-xs">3. Registro Fotográfico</h2><div class="grid grid-cols-4 gap-2">${fotos.map(([k,v])=>`<div><img src="${esc(v.url)}" class="w-full h-16 object-cover rounded border"><p class="text-[8px] text-center mt-0.5">${esc(photoTypes.find(x=>x[0]===k)?.[1]||k)}</p></div>`).join('')}</div>`:''}
+      
+      <h2 class="font-bold uppercase border-b pb-1 mt-3 mb-1 text-[11px] sm:text-xs">4. Termos e Condições</h2>
+      <div class="whitespace-normal text-[9px] leading-[1.2] text-justify text-slate-700">${terms}</div>
+      
+      <h2 class="font-bold uppercase border-b pb-1 mt-3 mb-1 text-[11px] sm:text-xs">5. Informações do Serviço</h2>
+      <p class="text-[11px] sm:text-xs"><b>Status:</b> ${esc(d.status)} &nbsp;&nbsp; <b>Total:</b> ${money(d.totalPagar)} &nbsp;&nbsp; <b>Pago:</b> ${money(d.valorPago)} &nbsp;&nbsp; <b>Pendente:</b> ${money(d.valorPendente)} &nbsp;&nbsp; <b>Forma:</b> ${esc(d.formaPagamento||'Não informado')}</p>
+      
+      <p class="mt-3 text-[9px] text-slate-500 text-center">Este documento registra as informações e o aceite relacionados à presente Ordem de Serviço.</p>
+      <div class="grid grid-cols-2 gap-8 mt-4">
+        <div class="text-center"><div class="h-10 flex items-end justify-center">${d.assinaturas?.cliente?`<img src="${esc(d.assinaturas.cliente)}" class="max-h-10 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-1 text-[10px]">Assinatura do cliente</div></div>
+        <div class="text-center"><div class="h-10 flex items-end justify-center">${d.assinaturas?.assistencia?`<img src="${esc(d.assinaturas.assistencia)}" class="max-h-10 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-1 text-[10px]">Assinatura da assistência</div></div>
       </div>
     </div>`;
   }
