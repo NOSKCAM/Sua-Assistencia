@@ -130,7 +130,7 @@
         <div class="p-4 sm:p-8 pt-2">
           <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse min-w-[900px]">
+              <table class="w-full text-left border-collapse min-w-[1000px]">
                 <thead>
                   <tr class="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
                     <th class="p-4">Foto</th><th class="p-4">Cliente / Contato</th><th class="p-4">Aparelho / Defeito</th>
@@ -176,11 +176,7 @@
                   <button type="button" onclick="adicionarItemWpp()" class="text-xs font-bold text-brand hover:text-brand-dark">+ Adicionar item</button>
                 </div>
                 <div id="wpp-itens-container" class="space-y-2">
-                  <div class="flex gap-2 wpp-item-row">
-                    <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Descrição (Ex: Tela original)">
-                    <input type="number" class="wpp-item-valor w-24 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="R$" step="0.01">
-                    <button type="button" onclick="this.parentElement.remove()" class="p-2 text-red-500 hover:bg-red-50 rounded-lg"><i data-lucide="trash" class="w-4 h-4"></i></button>
-                  </div>
+                  <!-- Os itens dinâmicos entram aqui -->
                 </div>
               </div>
               
@@ -558,13 +554,19 @@ Este documento registra as condições da OS e não pretende afastar direitos as
   };
 
   /* ----- MÓDULO: WHATSAPP RECIBO ----- */
-  window.adicionarItemWpp = function() {
+  window.adicionarItemWpp = function(desc = '', valor = '') {
+    if (typeof desc !== 'string') desc = '';
+    if (typeof valor !== 'number' && typeof valor !== 'string') valor = '';
+    
     const container = document.getElementById('wpp-itens-container');
     const div = document.createElement('div');
     div.className = "flex gap-2 wpp-item-row";
+    
+    const safeDesc = desc.replace(/"/g, '&quot;');
+    
     div.innerHTML = `
-      <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Descrição (Ex: Tela original)">
-      <input type="number" class="wpp-item-valor w-24 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="R$" step="0.01">
+      <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Descrição (Ex: Tela original)" value="${safeDesc}">
+      <input type="number" class="wpp-item-valor w-24 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="R$" step="0.01" value="${valor}">
       <button type="button" onclick="this.parentElement.remove()" class="p-2 text-red-500 hover:bg-red-50 rounded-lg"><i data-lucide="trash" class="w-4 h-4"></i></button>
     `;
     container.appendChild(div);
@@ -610,6 +612,25 @@ Este documento registra as condições da OS e não pretende afastar direitos as
     textarea.select();
     document.execCommand('copy');
     alert("Texto copiado para a área de transferência! Cole no WhatsApp.");
+  };
+
+  window.prepararReciboWpp = function(id) {
+    const os = osById(id);
+    if(!os) return;
+
+    showSection('recibo');
+
+    document.getElementById('wpp-nome').value = os.nome || '';
+    document.getElementById('wpp-aparelho').value = os.aparelho || '';
+    
+    document.getElementById('wpp-itens-container').innerHTML = '';
+    
+    adicionarItemWpp(os.defeito || 'Serviço de Reparo', os.totalPagar || 0);
+
+    document.getElementById('wpp-frete').value = '';
+    document.getElementById('wpp-mao-obra').value = '';
+
+    gerarTextoWhatsApp();
   };
 
   /* ----- MÓDULO: FINANCEIRO ----- */
@@ -749,7 +770,6 @@ Este documento registra as condições da OS e não pretende afastar direitos as
         const color = statusColors[os.status] || 'bg-slate-100 text-slate-600';
         const isPago = os.situacaoPagamento === 'Pago' || (os.valorPendente <= 0 && os.valorFinal > 0);
         
-        // Exibe o selo "Pago" e esconde valor aberto
         const statusPagamentoHtml = isPago 
           ? `<p class="font-semibold">${money(os.totalPagar)}</p><span class="inline-block mt-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Pago</span>`
           : `<p class="font-semibold">${money(os.totalPagar)}</p><p class="text-xs text-red-500">Pendente: ${money(os.valorPendente)}</p>`;
@@ -762,11 +782,12 @@ Este documento registra as condições da OS e não pretende afastar direitos as
           <td class="p-4">${statusPagamentoHtml}</td>
           <td class="p-4"><span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${color}">${esc(os.status)}</span></td>
           <td class="p-4 text-right whitespace-nowrap">
-            <button onclick="sendWhatsApp('${esc(os.telefone)}','${esc(os.nome)}','${esc(os.aparelho)}','${esc(os.status)}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg" title="WhatsApp"><i data-lucide="message-circle" class="w-5 h-5"></i></button>
+            <button onclick="sendWhatsApp('${esc(os.telefone)}','${esc(os.nome)}','${esc(os.aparelho)}','${esc(os.status)}')" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg" title="Status WhatsApp"><i data-lucide="message-circle" class="w-5 h-5"></i></button>
+            <button onclick="prepararReciboWpp('${os.idDoc}')" class="p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg" title="Gerar Recibo"><i data-lucide="receipt" class="w-5 h-5"></i></button>
             <button onclick="prepararEdicao('${os.idDoc}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Editar"><i data-lucide="edit" class="w-5 h-5"></i></button>
             <button onclick="abrirDocumentoPorId('${os.idDoc}')" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg" title="Documento"><i data-lucide="file-signature" class="w-5 h-5"></i></button>
             <button onclick="excluirOS('${os.idDoc}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg" title="Excluir"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-          `;
+          </td>`;
         tbody.appendChild(tr);
       });
       icons();
