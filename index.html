@@ -36,11 +36,11 @@
           <div class="w-12 h-12 bg-brand rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25">OS</div>
           <div>
             <h1 class="font-bold text-xl text-slate-900">Mackson Technology</h1>
-            <p class="text-xs text-slate-500">GestÃ£o de Ordens de ServiÃ§o</p>
+            <p class="text-xs text-slate-500">Gestão de Ordens de Serviço</p>
           </div>
         </div>
         <h2 class="text-lg font-bold text-slate-900 mb-1">Entrar</h2>
-        <p class="text-sm text-slate-500 mb-6">Acesse seu painel de assistÃªncia tÃ©cnica.</p>
+        <p class="text-sm text-slate-500 mb-6">Acesse seu painel de assistência técnica.</p>
         <div class="space-y-4">
           <button id="btn-google-login" type="button"
             class="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-800 font-semibold py-3 px-4 rounded-xl border border-slate-200 shadow-sm transition disabled:opacity-60 disabled:cursor-not-allowed">
@@ -89,7 +89,7 @@
       <nav class="flex-1 p-4 space-y-2">
         <button onclick="showSection('ordens'); toggleMobileMenu(true);" id="nav-ordens"
           class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 text-brand font-semibold text-sm transition">
-          <i data-lucide="file-text" class="w-5 h-5"></i><span>Ordens de ServiÃ§o</span>
+          <i data-lucide="file-text" class="w-5 h-5"></i><span>Ordens de Serviço</span>
         </button>
         <button onclick="showSection('recibo'); toggleMobileMenu(true);" id="nav-recibo"
           class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-sm transition">
@@ -101,7 +101,7 @@
         </button>
         <button onclick="showSection('termos'); toggleMobileMenu(true);" id="nav-termos"
           class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 font-semibold text-sm transition">
-          <i data-lucide="file-cog" class="w-5 h-5"></i><span>Termos e CondiÃ§Ãµes</span>
+          <i data-lucide="file-cog" class="w-5 h-5"></i><span>Termos e Condições</span>
         </button>
       </nav>
       <div class="p-4 border-t border-slate-100">
@@ -120,8 +120,8 @@
       <section id="section-ordens">
         <div class="p-4 sm:p-8 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Ordens de ServiÃ§o</h1>
-            <p class="text-xs sm:text-sm text-slate-500">Clientes, aparelhos, fotos, financeiro e documentos em um sÃ³ lugar.</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Ordens de Serviço</h1>
+            <p class="text-xs sm:text-sm text-slate-500">Clientes, aparelhos, fotos, financeiro e documentos em um só lugar.</p>
           </div>
           <button onclick="openModal()" class="bg-brand hover:bg-brand-dark text-white font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 transition active:scale-95">
             <i data-lucide="plus" class="w-5 h-5"></i><span>Nova OS</span>
@@ -134,7 +134,7 @@
                 <thead>
                   <tr class="bg-slate-50 border-b border-slate-100 text-xs uppercase tracking-wider text-slate-500 font-semibold">
                     <th class="p-4">Foto</th><th class="p-4">Cliente / Contato</th><th class="p-4">Aparelho / Defeito</th>
-                    <th class="p-4">Financeiro</th><th class="p-4">Status</th><th class="p-4 text-right">AÃ§Ãµes</th>
+                    <th class="p-4">Financeiro</th><th class="p-4">Status</th><th class="p-4 text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody id="os-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -142,11 +142,11 @@
             </div>
             <div id="loading-state" class="flex flex-col items-center justify-center p-12 text-slate-400">
               <i data-lucide="loader-2" class="w-8 h-8 mb-3 animate-spin text-brand"></i>
-              <p class="font-medium text-sm">Carregando ordens de serviÃ§o...</p>
+              <p class="font-medium text-sm">Carregando ordens de serviço...</p>
             </div>
             <div id="empty-state" class="hidden flex-col items-center justify-center p-12 text-slate-400">
               <i data-lucide="inbox" class="w-12 h-12 mb-3 text-slate-300"></i>
-              <p class="font-medium">Nenhuma Ordem de ServiÃ§o cadastrada.</p>
+              <p class="font-medium">Nenhuma Ordem de Serviço cadastrada.</p>
             </div>
           </div>
         </div>
@@ -156,14 +156,14 @@
       <section id="section-recibo" class="hidden">
         <div class="p-4 sm:p-8 pb-4">
           <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Recibo WhatsApp</h1>
-          <p class="text-xs sm:text-sm text-slate-500">Gere um orÃ§amento detalhado e formatado pronto para copiar e enviar ao cliente.</p>
+          <p class="text-xs sm:text-sm text-slate-500">Gere um orçamento detalhado e formatado pronto para copiar e enviar ao cliente.</p>
         </div>
         <div class="p-4 sm:p-8 pt-2">
           <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-6 max-w-4xl grid md:grid-cols-2 gap-8">
             <div class="space-y-4">
               <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1">Nome do Cliente</label>
-                <input type="text" id="wpp-nome" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Ex: JoÃ£o Silva">
+                <input type="text" id="wpp-nome" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Ex: João Silva">
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1">Aparelho</label>
@@ -172,12 +172,12 @@
               
               <div class="border-t border-slate-100 pt-4">
                 <div class="flex items-center justify-between mb-2">
-                  <label class="block text-xs font-semibold text-slate-500">Itens / PeÃ§as / ServiÃ§os</label>
+                  <label class="block text-xs font-semibold text-slate-500">Itens / Peças / Serviços</label>
                   <button type="button" onclick="adicionarItemWpp()" class="text-xs font-bold text-brand hover:text-brand-dark">+ Adicionar item</button>
                 </div>
                 <div id="wpp-itens-container" class="space-y-2">
                   <div class="flex gap-2 wpp-item-row">
-                    <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="DescriÃ§Ã£o (Ex: Tela original)">
+                    <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Descrição (Ex: Tela original)">
                     <input type="number" class="wpp-item-valor w-24 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="R$" step="0.01">
                     <button type="button" onclick="this.parentElement.remove()" class="p-2 text-red-500 hover:bg-red-50 rounded-lg"><i data-lucide="trash" class="w-4 h-4"></i></button>
                   </div>
@@ -190,7 +190,7 @@
                   <input type="number" id="wpp-frete" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="0.00" step="0.01">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-slate-500 mb-1">MÃ£o de Obra</label>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1">Mão de Obra</label>
                   <input type="number" id="wpp-mao-obra" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="0.00" step="0.01">
                 </div>
               </div>
@@ -198,8 +198,8 @@
             </div>
             
             <div class="flex flex-col">
-              <label class="block text-xs font-semibold text-slate-500 mb-1">PrÃ©-visualizaÃ§Ã£o do WhatsApp</label>
-              <textarea id="wpp-texto-gerado" rows="12" class="w-full flex-1 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-sm resize-none mb-3" readonly placeholder="O texto formatado aparecerÃ¡ aqui..."></textarea>
+              <label class="block text-xs font-semibold text-slate-500 mb-1">Pré-visualização do WhatsApp</label>
+              <textarea id="wpp-texto-gerado" rows="12" class="w-full flex-1 p-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none font-mono text-sm resize-none mb-3" readonly placeholder="O texto formatado aparecerá aqui..."></textarea>
               <button type="button" onclick="copiarTextoWpp()" class="w-full py-3 bg-brand text-white rounded-xl font-semibold hover:bg-brand-dark transition flex justify-center items-center gap-2"><i data-lucide="copy" class="w-4 h-4"></i> Copiar Texto Formatado</button>
             </div>
           </div>
@@ -210,11 +210,11 @@
       <section id="section-financeiro" class="hidden">
         <div class="p-4 sm:p-8 pb-4">
           <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Financeiro & Lucros</h1>
-          <p class="text-xs sm:text-sm text-slate-500">Acompanhe o faturamento, custos de bastidores e lucro lÃ­quido da sua assistÃªncia.</p>
+          <p class="text-xs sm:text-sm text-slate-500">Acompanhe o faturamento, custos de bastidores e lucro líquido da sua assistência.</p>
         </div>
         <div class="p-4 sm:p-8 pt-2">
           <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-6 mb-6">
-            <h2 class="font-bold text-slate-900 mb-4">Filtrar RelatÃ³rio</h2>
+            <h2 class="font-bold text-slate-900 mb-4">Filtrar Relatório</h2>
             <div class="flex flex-wrap items-end gap-4">
               <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1">Data Inicial</label>
@@ -229,9 +229,9 @@
               <div class="h-8 border-l border-slate-200 mx-2 hidden sm:block"></div>
               
               <div class="flex gap-2">
-                <button onclick="filtrarFinanceiro(3)" class="px-3 py-2 bg-slate-100 text-slate-700 font-semibold text-xs rounded-lg hover:bg-slate-200">Ãltimos 3 dias</button>
-                <button onclick="filtrarFinanceiro(10)" class="px-3 py-2 bg-slate-100 text-slate-700 font-semibold text-xs rounded-lg hover:bg-slate-200">Ãltimos 10 dias</button>
-                <button onclick="filtrarFinanceiro('mes')" class="px-3 py-2 bg-blue-50 text-brand font-semibold text-xs rounded-lg hover:bg-blue-100">Este mÃªs</button>
+                <button onclick="filtrarFinanceiro(3)" class="px-3 py-2 bg-slate-100 text-slate-700 font-semibold text-xs rounded-lg hover:bg-slate-200">Últimos 3 dias</button>
+                <button onclick="filtrarFinanceiro(10)" class="px-3 py-2 bg-slate-100 text-slate-700 font-semibold text-xs rounded-lg hover:bg-slate-200">Últimos 10 dias</button>
+                <button onclick="filtrarFinanceiro('mes')" class="px-3 py-2 bg-blue-50 text-brand font-semibold text-xs rounded-lg hover:bg-blue-100">Este mês</button>
               </div>
             </div>
           </div>
@@ -243,18 +243,18 @@
               <p class="text-[10px] text-slate-400 mt-1">Total recebido/cobrado dos clientes</p>
             </div>
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col justify-center">
-              <p class="text-sm font-semibold text-slate-500 mb-1 flex items-center gap-2"><i data-lucide="trending-down" class="w-4 h-4 text-red-500"></i> Custos (PeÃ§as + Frete)</p>
+              <p class="text-sm font-semibold text-slate-500 mb-1 flex items-center gap-2"><i data-lucide="trending-down" class="w-4 h-4 text-red-500"></i> Custos (Peças + Frete)</p>
               <h3 id="fin-custos" class="text-2xl font-bold text-slate-900">R$ 0,00</h3>
               <p class="text-[10px] text-slate-400 mt-1">Gasto com fornecedores</p>
             </div>
             <div class="bg-brand border border-brand-dark rounded-2xl shadow-sm p-6 flex flex-col justify-center">
-              <p class="text-sm font-semibold text-blue-100 mb-1 flex items-center gap-2"><i data-lucide="wallet" class="w-4 h-4 text-white"></i> Lucro LÃ­quido</p>
+              <p class="text-sm font-semibold text-blue-100 mb-1 flex items-center gap-2"><i data-lucide="wallet" class="w-4 h-4 text-white"></i> Lucro Líquido</p>
               <h3 id="fin-liquido" class="text-2xl font-bold text-white">R$ 0,00</h3>
-              <p class="text-[10px] text-blue-200 mt-1">Livre apÃ³s abater os custos</p>
+              <p class="text-[10px] text-blue-200 mt-1">Livre após abater os custos</p>
             </div>
           </div>
           <div class="mt-4 text-xs text-slate-400 font-medium text-right">
-            Total de Ordens no perÃ­odo: <span id="fin-qtd-os" class="font-bold text-slate-600">0</span>
+            Total de Ordens no período: <span id="fin-qtd-os" class="font-bold text-slate-600">0</span>
           </div>
         </div>
       </section>
@@ -262,15 +262,15 @@
       <!-- TERMOS -->
       <section id="section-termos" class="hidden">
         <div class="p-4 sm:p-8 pb-4">
-          <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Termos e CondiÃ§Ãµes</h1>
-          <p class="text-xs sm:text-sm text-slate-500">Edite o texto que serÃ¡ usado nos novos documentos das OS.</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-slate-900">Termos e Condições</h1>
+          <p class="text-xs sm:text-sm text-slate-500">Edite o texto que será usado nos novos documentos das OS.</p>
         </div>
         <div class="p-4 sm:p-8 pt-2">
           <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-6 max-w-5xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
-                <h2 class="font-bold text-slate-900">Texto padrÃ£o do documento</h2>
-                <p class="text-xs text-slate-500 mt-1">AlteraÃ§Ãµes futuras nÃ£o modificam o texto jÃ¡ registrado em documentos assinados.</p>
+                <h2 class="font-bold text-slate-900">Texto padrão do documento</h2>
+                <p class="text-xs text-slate-500 mt-1">Alterações futuras não modificam o texto já registrado em documentos assinados.</p>
               </div>
               <button onclick="salvarTermos()" id="btn-salvar-termos" class="bg-brand hover:bg-brand-dark text-white px-4 py-2.5 rounded-xl font-semibold text-sm w-full sm:w-auto">Salvar termos</button>
             </div>
@@ -288,7 +288,7 @@
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden max-h-[95vh] sm:max-h-[94vh] flex flex-col my-auto">
       <div class="p-4 sm:p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
         <div>
-          <h2 class="font-bold text-base sm:text-lg text-slate-800" id="modal-title">Nova Ordem de ServiÃ§o</h2>
+          <h2 class="font-bold text-base sm:text-lg text-slate-800" id="modal-title">Nova Ordem de Serviço</h2>
           <p id="modal-os-id" class="text-xs text-slate-500 mt-0.5"></p>
         </div>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -306,7 +306,7 @@
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">WhatsApp *</label>
-              <input type="text" id="os-telefone" placeholder="DDD + nÃºmero" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm">
+              <input type="text" id="os-telefone" placeholder="DDD + número" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">CPF <span class="font-normal text-slate-400">(opcional)</span></label>
@@ -321,30 +321,30 @@
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">Marca <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-marca" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">Modelo <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-aparelho" required placeholder="Ex.: iPhone 11" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">IMEI <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-imei" inputmode="numeric" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">NÃºmero de sÃ©rie <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-serial" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Número de série <span class="font-normal text-slate-400">(opcional)</span></label><input id="os-serial" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
             <div class="md:col-span-2"><label class="block text-xs font-semibold text-slate-500 mb-1">Defeito / relato *</label><textarea id="os-defeito" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20 text-sm"></textarea></div>
           </div>
           <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Estado fÃ­sico / observaÃ§Ãµes <span class="font-normal text-slate-400">(opcional)</span></label><textarea id="os-estado" placeholder="Riscos, trincas, amassados, manchas etc." class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20 text-sm"></textarea></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">AcessÃ³rios entregues <span class="font-normal text-slate-400">(opcional)</span></label><textarea id="os-acessorios" placeholder="Capa, carregador, cabo..." class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20 text-sm"></textarea></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Estado físico / observações <span class="font-normal text-slate-400">(opcional)</span></label><textarea id="os-estado" placeholder="Riscos, trincas, amassados, manchas etc." class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20 text-sm"></textarea></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Acessórios entregues <span class="font-normal text-slate-400">(opcional)</span></label><textarea id="os-acessorios" placeholder="Capa, carregador, cabo..." class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand h-20 text-sm"></textarea></div>
           </div>
         </div>
 
         <div>
           <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2 text-sm sm:text-base"><i data-lucide="wallet" class="w-4 h-4 text-brand"></i>Financeiro</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor do orÃ§amento</label><input id="os-orcamento" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor do orçamento</label><input id="os-orcamento" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor final do reparo</label><input id="os-valor-final" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">Desconto</label><input id="os-desconto" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Total a pagar <span class="text-brand">(automÃ¡tico)</span></label><input id="os-total" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold text-sm"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Total a pagar <span class="text-brand">(automático)</span></label><input id="os-total" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold text-sm"></div>
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor pago</label><input id="os-pago" type="number" min="0" step="0.01" value="0" class="money w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm"></div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor pendente <span class="text-brand">(automÃ¡tico)</span></label><input id="os-pendente" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold text-sm"></div>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Valor pendente <span class="text-brand">(automático)</span></label><input id="os-pendente" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg font-bold text-sm"></div>
             <div><label class="block text-xs font-semibold text-slate-500 mb-1">Forma de pagamento</label>
               <select id="os-pagamento" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm bg-white">
-                <option value="">NÃ£o informado</option><option>Pix</option><option>Dinheiro</option><option>CartÃ£o de dÃ©bito</option><option>CartÃ£o de crÃ©dito</option><option>TransferÃªncia</option><option>Outro</option>
+                <option value="">Não informado</option><option>Pix</option><option>Dinheiro</option><option>Cartão de débito</option><option>Cartão de crédito</option><option>Transferência</option><option>Outro</option>
               </select>
             </div>
-            <div><label class="block text-xs font-semibold text-slate-500 mb-1">SituaÃ§Ã£o</label>
+            <div><label class="block text-xs font-semibold text-slate-500 mb-1">Situação</label>
               <select id="os-situacao-pagamento" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm bg-white">
                 <option value="Pendente">Pendente</option><option value="Parcialmente pago">Parcialmente pago</option><option value="Pago">Pago</option>
               </select>
@@ -352,9 +352,9 @@
           </div>
           <!-- CUSTOS BASTIDORES -->
           <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
-            <h4 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-xs"><i data-lucide="shield-alert" class="w-4 h-4 text-slate-400"></i>Custos de Bastidores (InvisÃ­vel para o cliente)</h4>
+            <h4 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-xs"><i data-lucide="shield-alert" class="w-4 h-4 text-slate-400"></i>Custos de Bastidores (Invisível para o cliente)</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div><label class="block text-xs font-semibold text-slate-500 mb-1">Custo das PeÃ§as (Fornecedor)</label><input id="os-custo-pecas" type="number" min="0" step="0.01" value="0" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm bg-white"></div>
+              <div><label class="block text-xs font-semibold text-slate-500 mb-1">Custo das Peças (Fornecedor)</label><input id="os-custo-pecas" type="number" min="0" step="0.01" value="0" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm bg-white"></div>
               <div><label class="block text-xs font-semibold text-slate-500 mb-1">Custo de Frete (Total pago)</label><input id="os-custo-frete" type="number" min="0" step="0.01" value="0" class="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm bg-white"></div>
             </div>
           </div>
@@ -363,7 +363,7 @@
         <div>
           <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2 text-sm sm:text-base"><i data-lucide="activity" class="w-4 h-4 text-brand"></i>Status</h3>
           <select id="os-status" class="w-full md:w-1/2 p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm bg-white">
-            <option value="Recebido">Recebido na Bancada</option><option value="Em OrÃ§amento">Em OrÃ§amento</option><option value="Aguardando AprovaÃ§Ã£o">Aguardando AprovaÃ§Ã£o do Cliente</option><option value="Aguardando PeÃ§a">Aguardando PeÃ§a</option><option value="Em Reparo">Em Reparo</option><option value="Pronto">Pronto para Retirada</option><option value="Entregue">Entregue (Finalizado)</option>
+            <option value="Recebido">Recebido na Bancada</option><option value="Em Orçamento">Em Orçamento</option><option value="Aguardando Aprovação">Aguardando Aprovação do Cliente</option><option value="Aguardando Peça">Aguardando Peça</option><option value="Em Reparo">Em Reparo</option><option value="Pronto">Pronto para Retirada</option><option value="Entregue">Entregue (Finalizado)</option>
           </select>
         </div>
 
@@ -381,7 +381,7 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div>
               <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm sm:text-base"><i data-lucide="file-signature" class="w-4 h-4 text-brand"></i>Documento e assinaturas</h3>
-              <p class="text-xs text-slate-500">O documento usa a versÃ£o dos termos registrada nesta OS.</p>
+              <p class="text-xs text-slate-500">O documento usa a versão dos termos registrada nesta OS.</p>
             </div>
             <div class="flex flex-wrap gap-2">
               <button type="button" onclick="openDocumentPreview()" class="px-3 py-2 rounded-lg border border-slate-200 text-slate-700 text-xs sm:text-sm font-semibold hover:bg-slate-50">Visualizar</button>
@@ -403,13 +403,13 @@
             </div>
             <div class="border border-slate-200 rounded-xl p-3 bg-slate-50/50">
               <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-semibold text-slate-800">Assinatura da assistÃªncia</span>
+                <span class="text-sm font-semibold text-slate-800">Assinatura da assistência</span>
                 <button type="button" onclick="clearSignature('assistencia')" class="text-xs text-red-600 hover:underline font-medium">Limpar</button>
               </div>
               <div class="bg-white border border-slate-300 rounded-lg overflow-hidden relative shadow-inner">
                 <canvas id="signature-assistencia" class="signature-pad w-full h-40 block"></canvas>
               </div>
-              <button type="button" onclick="salvarAssinatura('assistencia')" class="mt-2.5 w-full py-2 bg-brand text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-brand-dark transition">Salvar assinatura da assistÃªncia</button>
+              <button type="button" onclick="salvarAssinatura('assistencia')" class="mt-2.5 w-full py-2 bg-brand text-white rounded-lg text-sm font-semibold shadow-sm hover:bg-brand-dark transition">Salvar assinatura da assistência</button>
               <div id="assistencia-sign-status" class="text-xs text-slate-500 mt-2 text-center"></div>
             </div>
           </div>
@@ -471,8 +471,8 @@
   const auth = getAuth(app);
 
   const statusColors = {
-    'Recebido':'bg-slate-100 text-slate-600','Em OrÃ§amento':'bg-amber-100 text-amber-700',
-    'Aguardando AprovaÃ§Ã£o':'bg-orange-100 text-orange-700','Aguardando PeÃ§a':'bg-red-100 text-red-700',
+    'Recebido':'bg-slate-100 text-slate-600','Em Orçamento':'bg-amber-100 text-amber-700',
+    'Aguardando Aprovação':'bg-orange-100 text-orange-700','Aguardando Peça':'bg-red-100 text-red-700',
     'Em Reparo':'bg-blue-100 text-blue-700','Pronto':'bg-emerald-100 text-emerald-700',
     'Entregue':'bg-purple-100 text-purple-700'
   };
@@ -480,37 +480,37 @@
   const photoTypes = [
     ['frente','Frente','smartphone'],['traseira','Traseira','smartphone'],
     ['tela','Tela','scan-line'],['laterais','Laterais','move-horizontal'],
-    ['estadoFisico','Estado fÃ­sico','search'],['acessorios','AcessÃ³rios entregues','package']
+    ['estadoFisico','Estado físico','search'],['acessorios','Acessórios entregues','package']
   ];
 
   const DEFAULT_TERMS = `1. TERMO DE ENTRADA
-O cliente declara entregar o aparelho identificado neste documento para avaliaÃ§Ã£o e/ou execuÃ§Ã£o do serviÃ§o solicitado, ficando registradas as condiÃ§Ãµes informadas no momento da entrada.
+O cliente declara entregar o aparelho identificado neste documento para avaliação e/ou execução do serviço solicitado, ficando registradas as condições informadas no momento da entrada.
 
-2. AUTORIZAÃÃO PARA DIAGNÃSTICO E REPARO
-O cliente autoriza a assistÃªncia tÃ©cnica a realizar diagnÃ³stico, testes tÃ©cnicos e os procedimentos necessÃ¡rios ao serviÃ§o autorizado, dentro do escopo combinado com o cliente.
+2. AUTORIZAÇÃO PARA DIAGNÓSTICO E REPARO
+O cliente autoriza a assistência técnica a realizar diagnóstico, testes técnicos e os procedimentos necessários ao serviço autorizado, dentro do escopo combinado com o cliente.
 
-3. DADOS E ACESSÃRIOS
-O cliente declara ser responsÃ¡vel pelos dados armazenados no aparelho e fica ciente da importÃ¢ncia de possuir backup. A assistÃªncia nÃ£o deverÃ¡ acessar conteÃºdo pessoal alÃ©m do estritamente necessÃ¡rio Ã  execuÃ§Ã£o de testes e do serviÃ§o autorizado. Os acessÃ³rios recebidos serÃ£o aqueles descritos na OS.
+3. DADOS E ACESSÓRIOS
+O cliente declara ser responsável pelos dados armazenados no aparelho e fica ciente da importância de possuir backup. A assistência não deverá acessar conteúdo pessoal além do estritamente necessário à execução de testes e do serviço autorizado. Os acessórios recebidos serão aqueles descritos na OS.
 
-4. ESTADO FÃSICO E REGISTRO
-As condiÃ§Ãµes aparentes do aparelho e os acessÃ³rios entregues serÃ£o registradas na OS e, quando houver, por fotografias. Danos, marcas ou defeitos preexistentes devem ser considerados conforme o registro realizado na entrada.
+4. ESTADO FÍSICO E REGISTRO
+As condições aparentes do aparelho e os acessórios entregues serão registradas na OS e, quando houver, por fotografias. Danos, marcas ou defeitos preexistentes devem ser considerados conforme o registro realizado na entrada.
 
 5. TERMO DE RESPONSABILIDADE
-A assistÃªncia realizarÃ¡ o serviÃ§o com diligÃªncia tÃ©cnica compatÃ­vel com a natureza do reparo. O cliente declara ciÃªncia de que determinados procedimentos tÃ©cnicos podem envolver riscos inerentes ao equipamento, especialmente quando houver danos preexistentes, oxidaÃ§Ã£o, componentes comprometidos ou intervenÃ§Ãµes anteriores.
+A assistência realizará o serviço com diligência técnica compatível com a natureza do reparo. O cliente declara ciência de que determinados procedimentos técnicos podem envolver riscos inerentes ao equipamento, especialmente quando houver danos preexistentes, oxidação, componentes comprometidos ou intervenções anteriores.
 
-6. PEÃAS E SERVIÃO
-Quando houver substituiÃ§Ã£o de componente, o serviÃ§o e a peÃ§a utilizada serÃ£o registrados na OS quando aplicÃ¡vel. Qualquer alteraÃ§Ã£o relevante de escopo ou custo deverÃ¡ ser comunicada ao cliente antes da execuÃ§Ã£o, sempre que possÃ­vel.
+6. PEÇAS E SERVIÇO
+Quando houver substituição de componente, o serviço e a peça utilizada serão registrados na OS quando aplicável. Qualquer alteração relevante de escopo ou custo deverá ser comunicada ao cliente antes da execução, sempre que possível.
 
-7. GARANTIA E CONDIÃÃES DO SERVIÃO
-A garantia aplicÃ¡vel ao serviÃ§o e/ou peÃ§a serÃ¡ informada pela assistÃªncia conforme o caso concreto e deverÃ¡ respeitar a legislaÃ§Ã£o aplicÃ¡vel. A garantia nÃ£o se confunde com cobertura para novos danos, mau uso, acidentes, lÃ­quidos ou intervenÃ§Ãµes posteriores de terceiros, quando tais fatos forem comprovadamente relacionados ao problema apresentado.
+7. GARANTIA E CONDIÇÕES DO SERVIÇO
+A garantia aplicável ao serviço e/ou peça será informada pela assistência conforme o caso concreto e deverá respeitar a legislação aplicável. A garantia não se confunde com cobertura para novos danos, mau uso, acidentes, líquidos ou intervenções posteriores de terceiros, quando tais fatos forem comprovadamente relacionados ao problema apresentado.
 
 8. TERMO DE RETIRADA
-No momento da retirada, o cliente declara receber o aparelho e os acessÃ³rios registrados, podendo conferir o equipamento. A retirada e o encerramento da OS poderÃ£o ser registrados no sistema juntamente com a assinatura do cliente.
+No momento da retirada, o cliente declara receber o aparelho e os acessórios registrados, podendo conferir o equipamento. A retirada e o encerramento da OS poderão ser registrados no sistema juntamente com a assinatura do cliente.
 
-9. CIÃNCIA E ACEITE
-Ao assinar este documento, o cliente declara que recebeu as informaÃ§Ãµes nele registradas, autorizou os procedimentos descritos e teve oportunidade de esclarecer dÃºvidas antes da execuÃ§Ã£o do serviÃ§o.
+9. CIÊNCIA E ACEITE
+Ao assinar este documento, o cliente declara que recebeu as informações nele registradas, autorizou os procedimentos descritos e teve oportunidade de esclarecer dúvidas antes da execução do serviço.
 
-Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direitos assegurados pela legislaÃ§Ã£o aplicÃ¡vel.`;
+Este documento registra as condições da OS e não pretende afastar direitos assegurados pela legislação aplicável.`;
 
   let ordensCache = [];
   let currentOS = null;
@@ -557,13 +557,13 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     if(section === 'financeiro') filtrarFinanceiro(30);
   };
 
-  /* ----- MÃDULO: WHATSAPP RECIBO ----- */
+  /* ----- MÓDULO: WHATSAPP RECIBO ----- */
   window.adicionarItemWpp = function() {
     const container = document.getElementById('wpp-itens-container');
     const div = document.createElement('div');
     div.className = "flex gap-2 wpp-item-row";
     div.innerHTML = `
-      <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="DescriÃ§Ã£o (Ex: Tela original)">
+      <input type="text" class="wpp-item-desc flex-1 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="Descrição (Ex: Tela original)">
       <input type="number" class="wpp-item-valor w-24 p-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand text-sm" placeholder="R$" step="0.01">
       <button type="button" onclick="this.parentElement.remove()" class="p-2 text-red-500 hover:bg-red-50 rounded-lg"><i data-lucide="trash" class="w-4 h-4"></i></button>
     `;
@@ -577,10 +577,10 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     const frete = parseFloat(document.getElementById('wpp-frete').value) || 0;
     const maoObra = parseFloat(document.getElementById('wpp-mao-obra').value) || 0;
     
-    let texto = `*ORÃAMENTO / RECIBO - MACKSON TECH*\n\n`;
+    let texto = `*ORÇAMENTO / RECIBO - MACKSON TECH*\n\n`;
     if(nome) texto += `*Cliente:* ${nome}\n`;
     if(aparelho) texto += `*Aparelho:* ${aparelho}\n\n`;
-    texto += `*Itens / ServiÃ§os:*\n`;
+    texto += `*Itens / Serviços:*\n`;
     
     let totalItens = 0;
     const descricoes = document.querySelectorAll('.wpp-item-desc');
@@ -596,10 +596,10 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     }
     
     if(frete > 0) texto += `\n*Frete:* R$ ${frete.toFixed(2)}\n`;
-    if(maoObra > 0) texto += `*MÃ£o de Obra:* R$ ${maoObra.toFixed(2)}\n`;
+    if(maoObra > 0) texto += `*Mão de Obra:* R$ ${maoObra.toFixed(2)}\n`;
     
     const totalGeral = totalItens + frete + maoObra;
-    texto += `\n*VALOR TOTAL:* *R$ ${totalGeral.toFixed(2)}*\n\nObrigado pela preferÃªncia!`;
+    texto += `\n*VALOR TOTAL:* *R$ ${totalGeral.toFixed(2)}*\n\nObrigado pela preferência!`;
     
     document.getElementById('wpp-texto-gerado').value = texto;
   };
@@ -609,10 +609,10 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     if(!textarea.value) return alert("Gere a mensagem primeiro!");
     textarea.select();
     document.execCommand('copy');
-    alert("Texto copiado para a Ã¡rea de transferÃªncia! Cole no WhatsApp.");
+    alert("Texto copiado para a área de transferência! Cole no WhatsApp.");
   };
 
-  /* ----- MÃDULO: FINANCEIRO ----- */
+  /* ----- MÓDULO: FINANCEIRO ----- */
   window.filtrarFinanceiro = function(dias = 30) {
     let inicio = new Date();
     let fim = new Date();
@@ -646,17 +646,17 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     document.getElementById('fin-qtd-os').textContent = qtd;
   };
 
-  /* ----- CORE DA APLICAÃÃO ----- */
+  /* ----- CORE DA APLICAÇÃO ----- */
   async function carregarTermos(){
     try{
       const snap = await getDoc(doc(db,'config','termos'));
       termosAtuais = snap.exists() && snap.data().texto ? snap.data().texto : DEFAULT_TERMS;
       document.getElementById('termos-editor').value = termosAtuais;
-      document.getElementById('termos-status').textContent = snap.exists() ? 'Termos carregados do Firebase.' : 'Usando termos padrÃ£o. Salve para gravar no Firebase.';
+      document.getElementById('termos-status').textContent = snap.exists() ? 'Termos carregados do Firebase.' : 'Usando termos padrão. Salve para gravar no Firebase.';
     }catch(e){
       console.error(e);
       document.getElementById('termos-editor').value = termosAtuais;
-      document.getElementById('termos-status').textContent = 'NÃ£o foi possÃ­vel carregar os termos. Verifique as regras do Firestore.';
+      document.getElementById('termos-status').textContent = 'Não foi possível carregar os termos. Verifique as regras do Firestore.';
     }
   }
 
@@ -664,7 +664,7 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     const btn = document.getElementById('btn-salvar-termos');
     const status = document.getElementById('termos-status');
     const texto = document.getElementById('termos-editor').value.trim();
-    if(!texto) return alert('O texto dos termos nÃ£o pode ficar vazio.');
+    if(!texto) return alert('O texto dos termos não pode ficar vazio.');
     btn.disabled = true; btn.textContent = 'Salvando...';
     try{
       await setDoc(doc(db,'config','termos'),{
@@ -695,7 +695,7 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
               : `<i data-lucide="${icon}" class="w-7 h-7 text-slate-300"></i>`}
           </div>
           <input type="file" accept="image/*" capture="environment" data-photo-input="${key}" class="w-full text-[10px] text-slate-500">
-          ${item.url ? `<button type="button" onclick="removerFoto('${key}')" class="mt-2 w-full py-1.5 rounded-lg text-xs font-semibold text-red-600 bg-red-50">Remover referÃªncia</button>`:''}
+          ${item.url ? `<button type="button" onclick="removerFoto('${key}')" class="mt-2 w-full py-1.5 rounded-lg text-xs font-semibold text-red-600 bg-red-50">Remover referência</button>`:''}
         </div>`);
     });
     grid.querySelectorAll('[data-photo-input]').forEach(input=>{
@@ -757,7 +757,7 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
         const tr=document.createElement('tr'); tr.className='hover:bg-slate-50 transition';
         tr.innerHTML=`
           <td class="p-4">${foto ? `<img src="${esc(foto.url)}" class="w-10 h-10 object-cover rounded-lg border cursor-pointer" onclick="window.open('${esc(foto.url)}','_blank')">` : `<div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center"><i data-lucide="image-off" class="w-4 h-4 text-slate-400"></i></div>`}</td>
-          <td class="p-4"><p class="font-bold text-slate-900">${esc(os.nome)}</p><p class="text-xs text-slate-500">${esc(os.telefone)}${os.cpf?' â¢ CPF '+esc(os.cpf):''}</p></td>
+          <td class="p-4"><p class="font-bold text-slate-900">${esc(os.nome)}</p><p class="text-xs text-slate-500">${esc(os.telefone)}${os.cpf?' • CPF '+esc(os.cpf):''}</p></td>
           <td class="p-4"><p class="font-medium">${esc(os.aparelho)}</p><p class="text-xs text-slate-500 truncate max-w-[220px]">${esc(os.defeito)}</p></td>
           <td class="p-4">${statusPagamentoHtml}</td>
           <td class="p-4"><span class="px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide uppercase ${color}">${esc(os.status)}</span></td>
@@ -771,7 +771,7 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
       });
       icons();
     }catch(e){
-      console.error(e); loading.innerHTML='<p class="text-red-500 text-xs p-6">Erro ao carregar. Verifique a conexÃ£o e as Security Rules do Firestore.</p>';
+      console.error(e); loading.innerHTML='<p class="text-red-500 text-xs p-6">Erro ao carregar. Verifique a conexão e as Security Rules do Firestore.</p>';
     }
   };
 
@@ -863,7 +863,7 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     document.getElementById('os-pago').value=os.valorPago||0; document.getElementById('os-pagamento').value=os.formaPagamento||'';
     document.getElementById('os-situacao-pagamento').value=os.situacaoPagamento||'Pendente';
     document.getElementById('os-custo-pecas').value=os.custoPecas||0; document.getElementById('os-custo-frete').value=os.custoFrete||0;
-    document.getElementById('modal-title').textContent='Editar Ordem de ServiÃ§o'; document.getElementById('modal-os-id').textContent='ID: '+id;
+    document.getElementById('modal-title').textContent='Editar Ordem de Serviço'; document.getElementById('modal-os-id').textContent='ID: '+id;
     document.getElementById('document-section').classList.remove('hidden'); document.getElementById('btn-doc-nova').classList.add('hidden');
     currentOS={...os}; resetPhotoState(os); calcFinance();
     
@@ -970,14 +970,14 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
   window.openModal = function(){
     document.getElementById('os-form').reset();document.getElementById('os-id').value='';
     document.getElementById('os-custo-pecas').value=0; document.getElementById('os-custo-frete').value=0;
-    document.getElementById('modal-title').textContent='Nova Ordem de ServiÃ§o';document.getElementById('modal-os-id').textContent='';
+    document.getElementById('modal-title').textContent='Nova Ordem de Serviço';document.getElementById('modal-os-id').textContent='';
     document.getElementById('document-section').classList.add('hidden');document.getElementById('btn-doc-nova').classList.remove('hidden');
     signatures.cliente=''; signatures.assistencia=''; resetPhotoState({}); calcFinance(); currentOS=null;
     document.getElementById('os-modal').style.display='flex';
     icons();
   };
 
-  window.abrirDocumentoNovaOS = function(){ alert('Primeiro salve a OS. Depois vocÃª poderÃ¡ gerar o documento e colher as assinaturas.'); };
+  window.abrirDocumentoNovaOS = function(){ alert('Primeiro salve a OS. Depois você poderá gerar o documento e colher as assinaturas.'); };
   window.closeModal = function(){ document.getElementById('os-modal').style.display='none'; };
   
   window.excluirOS = async function(id){
@@ -987,11 +987,11 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
 
   window.sendWhatsApp = function(telefone, nome, aparelho, status){
     let numero = String(telefone).replace(/\D/g,''); if(!numero.startsWith('55')) numero = '55' + numero;
-    let mensagem = `OlÃ¡, *${nome}*! Tudo bem? Aqui Ã© da assistÃªncia tÃ©cnica. ð ï¸\n\nAtualizaÃ§Ã£o sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
-    if(status === 'Pronto') mensagem += 'Ãtima notÃ­cia! Seu aparelho jÃ¡ estÃ¡ consertado e pronto para retirada. ð\n\n';
-    else if(status === 'Aguardando AprovaÃ§Ã£o') mensagem += 'O orÃ§amento jÃ¡ estÃ¡ disponÃ­vel para sua anÃ¡lise. Aguardamos sua confirmaÃ§Ã£o.\n\n';
-    else if(status === 'Aguardando PeÃ§a') mensagem += 'Estamos aguardando a chegada da peÃ§a necessÃ¡ria com o fornecedor.\n\n';
-    mensagem += 'Qualquer dÃºvida, estamos Ã  disposiÃ§Ã£o!';
+    let mensagem = `Olá, *${nome}*! Tudo bem? Aqui é da assistência técnica. 🛠️\n\nAtualização sobre o seu aparelho (*${aparelho}*).\n*Status Atual:* ${status}\n\n`;
+    if(status === 'Pronto') mensagem += 'Ótima notícia! Seu aparelho já está consertado e pronto para retirada. 🎉\n\n';
+    else if(status === 'Aguardando Aprovação') mensagem += 'O orçamento já está disponível para sua análise. Aguardamos sua confirmação.\n\n';
+    else if(status === 'Aguardando Peça') mensagem += 'Estamos aguardando a chegada da peça necessária com o fornecedor.\n\n';
+    mensagem += 'Qualquer dúvida, estamos à disposição!';
     window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
   };
 
@@ -1031,28 +1031,28 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     const terms = nl2br(d.termosVersao);
     return `<div class="bg-white max-w-[794px] mx-auto shadow-sm p-6 sm:p-10 text-slate-900 text-sm leading-6">
       <div class="border-b-2 border-slate-900 pb-4 mb-5 flex flex-col sm:flex-row justify-between gap-4">
-        <div><h1 class="text-xl sm:text-2xl font-bold">MACKSON TECHNOLOGY</h1><p class="text-xs text-slate-500">ORDEM DE SERVIÃO â DOCUMENTO DE ENTRADA E AUTORIZAÃÃO</p></div>
+        <div><h1 class="text-xl sm:text-2xl font-bold">MACKSON TECHNOLOGY</h1><p class="text-xs text-slate-500">ORDEM DE SERVIÇO — DOCUMENTO DE ENTRADA E AUTORIZAÇÃO</p></div>
         <div class="sm:text-right"><p class="font-bold">OS #${esc(os.idDoc)}</p><p class="text-xs">${esc(d.data)}</p></div>
       </div>
       <h2 class="font-bold uppercase border-b pb-1 mb-2">1. Cliente</h2>
       <p><b>Nome:</b> ${esc(d.nome)} <br class="sm:hidden"><b>WhatsApp:</b> ${esc(d.telefone)} ${d.cpf?`<br class="sm:hidden"><b>CPF:</b> ${esc(d.cpf)}`:''}</p>
       <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">2. Aparelho</h2>
-      <p><b>Marca:</b> ${esc(d.marca||'NÃ£o informado')} <br class="sm:hidden"><b>Modelo:</b> ${esc(d.aparelho)}</p>
-      <p><b>IMEI:</b> ${esc(d.imei||'NÃ£o informado')} <br class="sm:hidden"><b>NÂº de sÃ©rie:</b> ${esc(d.serial||'NÃ£o informado')}</p>
+      <p><b>Marca:</b> ${esc(d.marca||'Não informado')} <br class="sm:hidden"><b>Modelo:</b> ${esc(d.aparelho)}</p>
+      <p><b>IMEI:</b> ${esc(d.imei||'Não informado')} <br class="sm:hidden"><b>Nº de série:</b> ${esc(d.serial||'Não informado')}</p>
       <p><b>Defeito / relato:</b> ${nl2br(d.defeito)}</p>
-      <p><b>Estado fÃ­sico:</b> ${nl2br(d.estadoFisico||'NÃ£o informado')}</p>
-      <p><b>AcessÃ³rios:</b> ${nl2br(d.acessorios||'NÃ£o informado')}</p>
-      ${fotos.length?`<h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">3. Registro fotogrÃ¡fico</h2><div class="grid grid-cols-2 sm:grid-cols-3 gap-3">${fotos.map(([k,v])=>`<div><img src="${esc(v.url)}" class="w-full h-36 object-cover rounded border"><p class="text-[10px] text-center mt-1">${esc(photoTypes.find(x=>x[0]===k)?.[1]||k)}</p></div>`).join('')}</div>`:''}
-      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">4. Termos e condiÃ§Ãµes</h2>
+      <p><b>Estado físico:</b> ${nl2br(d.estadoFisico||'Não informado')}</p>
+      <p><b>Acessórios:</b> ${nl2br(d.acessorios||'Não informado')}</p>
+      ${fotos.length?`<h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">3. Registro fotográfico</h2><div class="grid grid-cols-2 sm:grid-cols-3 gap-3">${fotos.map(([k,v])=>`<div><img src="${esc(v.url)}" class="w-full h-36 object-cover rounded border"><p class="text-[10px] text-center mt-1">${esc(photoTypes.find(x=>x[0]===k)?.[1]||k)}</p></div>`).join('')}</div>`:''}
+      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">4. Termos e condições</h2>
       <div class="whitespace-normal text-xs sm:text-sm">${terms}</div>
-      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">5. InformaÃ§Ãµes do serviÃ§o</h2>
+      <h2 class="font-bold uppercase border-b pb-1 mt-5 mb-2">5. Informações do serviço</h2>
       <p><b>Status:</b> ${esc(d.status)} <br class="sm:hidden"><b>Valor final:</b> ${money(d.valorFinal)} <br class="sm:hidden"><b>Desconto:</b> ${money(d.desconto)}</p>
       <p><b>Total:</b> ${money(d.totalPagar)} <br class="sm:hidden"><b>Pago:</b> ${money(d.valorPago)} <br class="sm:hidden"><b>Pendente:</b> ${money(d.valorPendente)}</p>
-      <p><b>Forma de pagamento:</b> ${esc(d.formaPagamento||'NÃ£o informado')} <br class="sm:hidden"><b>SituaÃ§Ã£o:</b> ${esc(d.situacaoPagamento||'Pendente')}</p>
-      <p class="mt-4 text-xs text-slate-500">Este documento registra as informaÃ§Ãµes e o aceite relacionados Ã  presente Ordem de ServiÃ§o, observada a legislaÃ§Ã£o aplicÃ¡vel.</p>
+      <p><b>Forma de pagamento:</b> ${esc(d.formaPagamento||'Não informado')} <br class="sm:hidden"><b>Situação:</b> ${esc(d.situacaoPagamento||'Pendente')}</p>
+      <p class="mt-4 text-xs text-slate-500">Este documento registra as informações e o aceite relacionados à presente Ordem de Serviço, observada a legislação aplicável.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 mt-10 sm:mt-14">
         <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.cliente?`<img src="${esc(d.assinaturas.cliente)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura do cliente</div></div>
-        <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.assistencia?`<img src="${esc(d.assinaturas.assistencia)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura da assistÃªncia</div></div>
+        <div class="text-center"><div class="h-20 flex items-end justify-center">${d.assinaturas?.assistencia?`<img src="${esc(d.assinaturas.assistencia)}" class="max-h-20 max-w-full">`:''}</div><div class="border-t border-slate-900 pt-2">Assinatura da assistência</div></div>
       </div>
     </div>`;
   }
@@ -1066,10 +1066,10 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
     setTimeout(() => { 
         window.print(); 
         setTimeout(() => document.getElementById('print-document').classList.add('hidden'), 500); 
-    }, 400); // Delay permite a renderizaÃ§Ã£o em mobile antes do pop-up
+    }, 400); // Delay permite a renderização em mobile antes do pop-up
   };
 
-  // FIX MOBILE DOWNLOAD (SubstituiÃ§Ã£o da lib falha no mobile por MIME HTML-Word nativo)
+  // FIX MOBILE DOWNLOAD (Substituição da lib falha no mobile por MIME HTML-Word nativo)
   window.downloadDOCX = async function(){
     const os = currentOS || osById(document.getElementById('os-id').value);
     if(!os){ alert('Salve a OS primeiro.'); return; }
@@ -1106,11 +1106,11 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
       await signInWithPopup(auth, googleProvider);
     } catch (e) {
       console.error('Erro no login com Google:', e);
-      let message = 'NÃ£o foi possÃ­vel entrar com o Google. Tente novamente.';
+      let message = 'Não foi possível entrar com o Google. Tente novamente.';
       if (e?.code === 'auth/popup-closed-by-user') message = 'A janela do Google foi fechada antes de concluir o login.';
       else if (e?.code === 'auth/popup-blocked') message = 'O navegador bloqueou a janela de login. Permita pop-ups para este site e tente novamente.';
-      else if (e?.code === 'auth/unauthorized-domain') message = 'Este domÃ­nio ainda nÃ£o estÃ¡ autorizado no Firebase Authentication.';
-      else if (e?.code === 'auth/operation-not-allowed') message = 'O login com Google ainda nÃ£o estÃ¡ habilitado no Firebase Authentication.';
+      else if (e?.code === 'auth/unauthorized-domain') message = 'Este domínio ainda não está autorizado no Firebase Authentication.';
+      else if (e?.code === 'auth/operation-not-allowed') message = 'O login com Google ainda não está habilitado no Firebase Authentication.';
       err.textContent = message;
       err.classList.remove('hidden');
     } finally {
@@ -1125,7 +1125,7 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
   onAuthStateChanged(auth, async user => {
     const login = document.getElementById('login-screen'), appEl = document.getElementById('app-screen');
     if(user){
-      login.classList.add('hidden'); appEl.classList.remove('hidden'); document.getElementById('user-email').textContent = user.email || 'UsuÃ¡rio autenticado';
+      login.classList.add('hidden'); appEl.classList.remove('hidden'); document.getElementById('user-email').textContent = user.email || 'Usuário autenticado';
       await carregarTermos(); await carregarOS(); icons();
     }else{
       appEl.classList.add('hidden'); login.classList.remove('hidden');
@@ -1135,3 +1135,4 @@ Este documento registra as condiÃ§Ãµes da OS e nÃ£o pretende afastar direi
   icons();
 </script>
 </body>
+</html>
